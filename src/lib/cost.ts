@@ -5,6 +5,8 @@ const COLLECTION = 'admin_settings';
 const COST_DOC_ID = 'firebase_cost';
 const ACTIVE_USER_WINDOW_DAYS = 30;
 
+export type CostSource = 'manual' | 'bigquery';
+
 export interface CostSnapshot {
   monthYear: string; // 'YYYY-MM'
   amountUSD: number | null; // null = not set yet for the current month
@@ -13,6 +15,7 @@ export interface CostSnapshot {
   activeUsers: number;
   updatedAt: number | null;
   updatedBy: string | null;
+  source: CostSource;
 }
 
 function currentMonthYear(): string {
@@ -35,6 +38,8 @@ export async function getCostSnapshot(): Promise<CostSnapshot> {
   const cpu = amountUSD !== null && activeUsers > 0 ? amountUSD / activeUsers : null;
   const proj = amountUSD !== null && activeUsers > 0 ? amountUSD * 10 : null;
 
+  const source: CostSource = docData?.source === 'bigquery' ? 'bigquery' : 'manual';
+
   return {
     monthYear,
     amountUSD,
@@ -46,6 +51,7 @@ export async function getCostSnapshot(): Promise<CostSnapshot> {
         ? docData.updatedAt.toMillis()
         : null,
     updatedBy: typeof docData?.updatedBy === 'string' ? docData.updatedBy : null,
+    source,
   };
 }
 
@@ -74,6 +80,7 @@ export async function updateCost(input: CostUpdateInput): Promise<void> {
       amountUSD: input.amountUSD,
       updatedAt: new Date(),
       updatedBy: input.email,
+      source: 'manual',
     },
     { merge: true },
   );

@@ -68,7 +68,9 @@
     "amountLabel": "Amount in USD",
     "save": "Save",
     "invalidAmount": "Invalid amount",
-    "saveFailed": "Save failed. Please try again."
+    "saveFailed": "Save failed. Please try again.",
+    "sourceAuto": "Auto-updated from BigQuery",
+    "sourceManual": "Manually updated"
   },
   "errors": {
     "pageError": {

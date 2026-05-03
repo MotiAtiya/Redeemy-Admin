@@ -1,5 +1,5 @@
 import { getTranslations, getLocale } from 'next-intl/server';
-import { DollarSign, TrendingUp } from 'lucide-react';
+import { DollarSign, TrendingUp, Zap, Pencil as PencilSmall } from 'lucide-react';
 import { getCostSnapshot } from '@/lib/cost';
 import CostEditButton from './CostEditButton';
 
@@ -40,6 +40,19 @@ export default async function CostWidget() {
                 }
               />
             </dl>
+            <p className="text-[10px] text-text-tertiary mt-2 inline-flex items-center gap-1">
+              {snap.source === 'bigquery' ? (
+                <>
+                  <Zap size={10} aria-hidden />
+                  {t('sourceAuto')}
+                </>
+              ) : (
+                <>
+                  <PencilSmall size={10} aria-hidden />
+                  {t('sourceManual')}
+                </>
+              )}
+            </p>
           </>
         ) : (
           <p className="text-text-secondary text-sm leading-relaxed">{t('notSet')}</p>

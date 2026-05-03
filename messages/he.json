@@ -68,7 +68,9 @@
     "amountLabel": "סכום ב-USD",
     "save": "שמור",
     "invalidAmount": "סכום לא תקין",
-    "saveFailed": "השמירה נכשלה. נסה שוב."
+    "saveFailed": "השמירה נכשלה. נסה שוב.",
+    "sourceAuto": "מתעדכן אוטומטית מ-BigQuery",
+    "sourceManual": "עודכן ידנית"
   },
   "errors": {
     "pageError": {
