@@ -49,6 +49,15 @@ async function loadFamilies(): Promise<Map<string, FamilyDoc>> {
   return map;
 }
 
+// Categories where the doc has a status field and the user only "sees" the
+// active ones in the app (others move to History). Match that to keep the
+// dashboard counts aligned with the app's UI counts.
+const STATUS_FILTERED: ReadonlySet<ItemCollection> = new Set([
+  'credits',
+  'warranties',
+  'subscriptions',
+]);
+
 async function loadItemCounts(): Promise<Record<ItemCollection, Map<string, number>>> {
   const result = {} as Record<ItemCollection, Map<string, number>>;
   await Promise.all(
@@ -56,8 +65,15 @@ async function loadItemCounts(): Promise<Record<ItemCollection, Map<string, numb
       const snap = await adminFirestore.collection(col).get();
       const m = new Map<string, number>();
       snap.docs.forEach((d) => {
-        const uid = d.data().userId;
+        const data = d.data();
+        const uid = data.userId;
         if (typeof uid !== 'string' || !uid) return;
+        // For categories with a status, only count `active`. Treat missing
+        // status as active so legacy docs without the field aren't dropped.
+        if (STATUS_FILTERED.has(col)) {
+          const status = data.status;
+          if (typeof status === 'string' && status !== 'active') return;
+        }
         m.set(uid, (m.get(uid) ?? 0) + 1);
       });
       result[col] = m;
