@@ -10,6 +10,7 @@ export type EventType =
   | 'item_deleted'
   | 'credit_redeemed'
   | 'credit_unredeemed'
+  | 'credit_expired'
   | 'subscription_cancelled'
   | 'warranty_closed'
   | 'family_created'

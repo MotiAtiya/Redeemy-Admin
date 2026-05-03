@@ -17,6 +17,7 @@ import {
   Undo2,
   Ban,
   Archive,
+  Hourglass,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { loadEvents, type AppEvent, type EventType, type ItemCategory } from '@/lib/events';
@@ -32,6 +33,7 @@ const EVENT_ICON: Record<EventType, LucideIcon> = {
   item_deleted: Trash2,
   credit_redeemed: ShoppingBag,
   credit_unredeemed: Undo2,
+  credit_expired: Hourglass,
   subscription_cancelled: Ban,
   warranty_closed: Archive,
   family_created: Users,
@@ -133,6 +135,7 @@ function describeEvent(
       return t(`events.${e.type}`);
     case 'credit_redeemed':
     case 'credit_unredeemed':
+    case 'credit_expired':
     case 'subscription_cancelled':
     case 'warranty_closed':
       return t(`events.${e.type}`);

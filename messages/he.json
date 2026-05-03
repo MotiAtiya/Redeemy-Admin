@@ -75,6 +75,7 @@
       "item_deleted": "מחק",
       "credit_redeemed": "מימש זיכוי",
       "credit_unredeemed": "החזיר זיכוי לפעיל",
+      "credit_expired": "זיכוי פג תוקף",
       "subscription_cancelled": "ביטל מנוי",
       "warranty_closed": "סגר אחריות",
       "family_created": "יצר משפחה",

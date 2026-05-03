@@ -75,6 +75,7 @@
       "item_deleted": "deleted",
       "credit_redeemed": "redeemed a credit",
       "credit_unredeemed": "restored a credit to active",
+      "credit_expired": "credit expired",
       "subscription_cancelled": "cancelled a subscription",
       "warranty_closed": "closed a warranty",
       "family_created": "created a family",
