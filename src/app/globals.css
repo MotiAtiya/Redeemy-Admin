@@ -1,26 +1,67 @@
 @import "tailwindcss";
 
+/* ─── Redeemy Sage palette (matches mobile app src/constants/colors.ts) ─── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Surfaces */
+  --background: #F0FDFA;
+  --surface: #FFFFFF;
+  --surface-elevated: #FFFFFF;
+
+  /* Text */
+  --text-primary: #0F172A;
+  --text-secondary: #757575;
+  --text-tertiary: #9E9E9E;
+  --separator: #F5F5F5;
+
+  /* Brand */
+  --primary: #5F9E8F;
+  --primary-surface: #CCFBF1;
+
+  /* Icons */
+  --icon-active: #5F9E8F;
+  --icon-inactive: #9E9E9E;
+
+  /* States */
+  --danger: #D32F2F;
+  --urgency-red: #B91C1C;
+  --urgency-amber: #B45309;
+  --urgency-green: #166534;
+  --urgency-red-surface: #FEE2E2;
+  --urgency-amber-surface: #FEF3C7;
+  --urgency-green-surface: #DCFCE7;
+
+  --foreground: var(--text-primary);
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-elevated: var(--surface-elevated);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+  --color-separator: var(--separator);
+  --color-primary: var(--primary);
+  --color-primary-surface: var(--primary-surface);
+  --color-icon-active: var(--icon-active);
+  --color-icon-inactive: var(--icon-inactive);
+  --color-danger: var(--danger);
+  --color-urgency-red: var(--urgency-red);
+  --color-urgency-amber: var(--urgency-amber);
+  --color-urgency-green: var(--urgency-green);
+  --color-urgency-red-surface: var(--urgency-red-surface);
+  --color-urgency-amber-surface: var(--urgency-amber-surface);
+  --color-urgency-green-surface: var(--urgency-green-surface);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-sans: var(--font-heebo), system-ui, sans-serif;
+
+  --shadow-wallet: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --radius-card: 0.75rem;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-heebo), system-ui, sans-serif;
 }

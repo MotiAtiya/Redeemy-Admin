@@ -1,0 +1,27 @@
+{
+  "common": {
+    "appName": "Redeemy Admin",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "signingIn": "Signing in...",
+    "email": "Email",
+    "password": "Password",
+    "language": "Language",
+    "cancel": "Cancel",
+    "loading": "Loading..."
+  },
+  "auth": {
+    "title": "Redeemy Admin",
+    "subtitle": "Admin area. Only authorized accounts can sign in.",
+    "submit": "Sign in",
+    "or": "or",
+    "continueWithGoogle": "Continue with Google",
+    "errorInvalidCredentials": "Invalid email or password",
+    "errorAccessDenied": "This account is not authorized to access the admin area",
+    "errorGeneric": "Sign-in failed. Please try again."
+  },
+  "home": {
+    "welcome": "Welcome, {name}",
+    "placeholder": "The dashboard will live here. For now — just the Story 18.1 foundation shell."
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "common": {
+    "appName": "Redeemy Admin",
+    "signIn": "התחברות",
+    "signOut": "התנתק",
+    "signingIn": "מתחבר...",
+    "email": "אימייל",
+    "password": "סיסמה",
+    "language": "שפה",
+    "cancel": "ביטול",
+    "loading": "טוען..."
+  },
+  "auth": {
+    "title": "Redeemy Admin",
+    "subtitle": "אזור ניהול. רק חשבונות מורשים יכולים להיכנס.",
+    "submit": "התחבר",
+    "or": "או",
+    "continueWithGoogle": "המשך עם Google",
+    "errorInvalidCredentials": "אימייל או סיסמה שגויים",
+    "errorAccessDenied": "אין לחשבון זה הרשאת גישה לאזור הניהול",
+    "errorGeneric": "ההתחברות נכשלה. נסה שוב."
+  },
+  "home": {
+    "welcome": "ברוך הבא, {name}",
+    "placeholder": "כאן יופיע הדשבורד. כרגע — רק שלד התשתית מ-Story 18.1."
+  }
+}
