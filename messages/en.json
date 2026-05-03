@@ -73,6 +73,10 @@
       "item_created": "created",
       "item_updated": "updated",
       "item_deleted": "deleted",
+      "credit_redeemed": "redeemed a credit",
+      "credit_unredeemed": "restored a credit to active",
+      "subscription_cancelled": "cancelled a subscription",
+      "warranty_closed": "closed a warranty",
       "family_created": "created a family",
       "family_joined": "joined a family",
       "family_left": "left a family"

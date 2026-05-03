@@ -73,6 +73,10 @@
       "item_created": "יצר",
       "item_updated": "עדכן",
       "item_deleted": "מחק",
+      "credit_redeemed": "מימש זיכוי",
+      "credit_unredeemed": "החזיר זיכוי לפעיל",
+      "subscription_cancelled": "ביטל מנוי",
+      "warranty_closed": "סגר אחריות",
       "family_created": "יצר משפחה",
       "family_joined": "הצטרף למשפחה",
       "family_left": "עזב משפחה"

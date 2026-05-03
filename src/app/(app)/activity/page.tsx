@@ -13,6 +13,10 @@ import {
   Repeat,
   Cake,
   FileText,
+  ShoppingBag,
+  Undo2,
+  Ban,
+  Archive,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { loadEvents, type AppEvent, type EventType, type ItemCategory } from '@/lib/events';
@@ -26,6 +30,10 @@ const EVENT_ICON: Record<EventType, LucideIcon> = {
   item_created: Plus,
   item_updated: Pencil,
   item_deleted: Trash2,
+  credit_redeemed: ShoppingBag,
+  credit_unredeemed: Undo2,
+  subscription_cancelled: Ban,
+  warranty_closed: Archive,
   family_created: Users,
   family_joined: Users,
   family_left: Users,
@@ -122,6 +130,11 @@ function describeEvent(
     case 'family_created':
     case 'family_joined':
     case 'family_left':
+      return t(`events.${e.type}`);
+    case 'credit_redeemed':
+    case 'credit_unredeemed':
+    case 'subscription_cancelled':
+    case 'warranty_closed':
       return t(`events.${e.type}`);
     case 'item_created':
     case 'item_updated':
