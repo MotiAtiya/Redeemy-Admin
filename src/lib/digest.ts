@@ -10,9 +10,12 @@ export interface NewUser {
 }
 
 export interface Digest {
-  dateISO: string; // YYYY-MM-DD
-  dateLabelHe: string; // "3 במאי 2026"
-  dateLabelEn: string; // "May 3, 2026"
+  // Inclusive ISO date of the first day covered by the digest.
+  weekStartISO: string;
+  // Inclusive ISO date of the last day covered by the digest (yesterday in Israel TZ).
+  weekEndISO: string;
+  rangeLabelHe: string; // "26 באפריל – 2 במאי 2026"
+  rangeLabelEn: string; // "Apr 26 – May 2, 2026"
   newUsers: NewUser[];
   itemsCreated: Record<ItemCategory, number>;
   errors: {
@@ -28,11 +31,17 @@ export interface Digest {
 const ISRAEL_TIMEZONE = 'Asia/Jerusalem';
 
 /**
- * Compute the start (00:00) and end (23:59:59.999) of "yesterday" in Israel time,
- * expressed as UTC Date objects suitable for Firestore range queries.
+ * Compute the bounds of the digest period: the 7 calendar days leading up to
+ * (and including) yesterday in Israel time. Returned as UTC Date objects
+ * suitable for Firestore range queries.
  */
-function yesterdayBoundsInIsrael(): { start: Date; end: Date; isoDate: string } {
-  // Build the Israel-local date for "yesterday".
+function lastWeekBoundsInIsrael(): {
+  start: Date;
+  end: Date;
+  startISO: string;
+  endISO: string;
+} {
+  // Find "today" in Israel calendar terms.
   const nowFormatter = new Intl.DateTimeFormat('en-CA', {
     timeZone: ISRAEL_TIMEZONE,
     year: 'numeric',
@@ -40,28 +49,40 @@ function yesterdayBoundsInIsrael(): { start: Date; end: Date; isoDate: string } 
     day: '2-digit',
   });
   const todayParts = nowFormatter.formatToParts(new Date());
-  const y = Number(todayParts.find((p) => p.type === 'year')!.value);
-  const m = Number(todayParts.find((p) => p.type === 'month')!.value);
-  const d = Number(todayParts.find((p) => p.type === 'day')!.value);
+  const ty = Number(todayParts.find((p) => p.type === 'year')!.value);
+  const tm = Number(todayParts.find((p) => p.type === 'month')!.value);
+  const td = Number(todayParts.find((p) => p.type === 'day')!.value);
 
-  // Yesterday = (y, m, d) minus one day, computed via a UTC date as scaffolding.
-  const todayUtcMidnight = Date.UTC(y, m - 1, d);
-  const yesterdayUtcMidnight = todayUtcMidnight - 24 * 60 * 60 * 1000;
-  const yesterdayParts = new Date(yesterdayUtcMidnight);
+  // End = yesterday at 23:59:59.999 IL.  Start = end - 7 days + 1 ms (i.e. 8 days back at 00:00).
+  const todayUtcMidnight = Date.UTC(ty, tm - 1, td);
+  const endDayUtcMidnight = todayUtcMidnight - 24 * 60 * 60 * 1000; // yesterday
+  const startDayUtcMidnight = todayUtcMidnight - 7 * 24 * 60 * 60 * 1000; // 7 days ago
 
-  const yy = yesterdayParts.getUTCFullYear();
-  const mm = yesterdayParts.getUTCMonth();
-  const dd = yesterdayParts.getUTCDate();
+  const endParts = new Date(endDayUtcMidnight);
+  const startParts = new Date(startDayUtcMidnight);
 
-  // Israel offset in minutes for that yesterday date (handles DST automatically).
-  const offsetMinutes = getIsraelOffsetMinutes(new Date(Date.UTC(yy, mm, dd, 12)));
-  const startUtcMs = Date.UTC(yy, mm, dd, 0, 0, 0) - offsetMinutes * 60 * 1000;
-  const endUtcMs = Date.UTC(yy, mm, dd, 23, 59, 59, 999) - offsetMinutes * 60 * 1000;
+  const endY = endParts.getUTCFullYear();
+  const endM = endParts.getUTCMonth();
+  const endD = endParts.getUTCDate();
+  const startY = startParts.getUTCFullYear();
+  const startM = startParts.getUTCMonth();
+  const startD = startParts.getUTCDate();
+
+  const endOffsetMin = getIsraelOffsetMinutes(new Date(Date.UTC(endY, endM, endD, 12)));
+  const startOffsetMin = getIsraelOffsetMinutes(new Date(Date.UTC(startY, startM, startD, 12)));
+
+  const startUtcMs = Date.UTC(startY, startM, startD, 0, 0, 0) - startOffsetMin * 60 * 1000;
+  const endUtcMs =
+    Date.UTC(endY, endM, endD, 23, 59, 59, 999) - endOffsetMin * 60 * 1000;
+
+  const fmt = (y: number, m: number, d: number) =>
+    `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
 
   return {
     start: new Date(startUtcMs),
     end: new Date(endUtcMs),
-    isoDate: `${yy}-${String(mm + 1).padStart(2, '0')}-${String(dd).padStart(2, '0')}`,
+    startISO: fmt(startY, startM, startD),
+    endISO: fmt(endY, endM, endD),
   };
 }
 
@@ -83,28 +104,39 @@ function getIsraelOffsetMinutes(d: Date): number {
   return Math.round((local - d.getTime()) / 60000);
 }
 
-function formatDateHe(isoDate: string): string {
-  const [y, m, d] = isoDate.split('-').map(Number);
-  const months = [
-    'בינואר', 'בפברואר', 'במרץ', 'באפריל', 'במאי', 'ביוני',
-    'ביולי', 'באוגוסט', 'בספטמבר', 'באוקטובר', 'בנובמבר', 'בדצמבר',
-  ];
-  return `${d} ${months[m - 1]} ${y}`;
+const HE_MONTHS = [
+  'בינואר', 'בפברואר', 'במרץ', 'באפריל', 'במאי', 'ביוני',
+  'ביולי', 'באוגוסט', 'בספטמבר', 'באוקטובר', 'בנובמבר', 'בדצמבר',
+];
+const HE_MONTHS_NO_PREFIX = [
+  'ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני',
+  'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר',
+];
+
+function formatDateRangeHe(startISO: string, endISO: string): string {
+  const [sy, sm, sd] = startISO.split('-').map(Number);
+  const [ey, em, ed] = endISO.split('-').map(Number);
+  if (sy === ey && sm === em) {
+    return `${sd}–${ed} ${HE_MONTHS[em - 1]} ${ey}`;
+  }
+  if (sy === ey) {
+    return `${sd} ${HE_MONTHS_NO_PREFIX[sm - 1]} – ${ed} ${HE_MONTHS_NO_PREFIX[em - 1]} ${ey}`;
+  }
+  return `${sd} ${HE_MONTHS_NO_PREFIX[sm - 1]} ${sy} – ${ed} ${HE_MONTHS_NO_PREFIX[em - 1]} ${ey}`;
 }
 
-function formatDateEn(isoDate: string): string {
-  return new Date(`${isoDate}T12:00:00Z`).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    timeZone: 'UTC',
-  });
+function formatDateRangeEn(startISO: string, endISO: string): string {
+  const opts: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric', timeZone: 'UTC' };
+  const start = new Date(`${startISO}T12:00:00Z`).toLocaleDateString('en-US', opts);
+  const end = new Date(`${endISO}T12:00:00Z`).toLocaleDateString('en-US', opts);
+  const year = endISO.slice(0, 4);
+  return `${start} – ${end}, ${year}`;
 }
 
 const ITEM_CATEGORIES: ItemCategory[] = ['credit', 'warranty', 'subscription', 'occasion', 'document'];
 
 export async function buildDigest(): Promise<Digest> {
-  const { start, end, isoDate } = yesterdayBoundsInIsrael();
+  const { start, end, startISO, endISO } = lastWeekBoundsInIsrael();
 
   const [
     newUsers,
@@ -123,9 +155,10 @@ export async function buildDigest(): Promise<Digest> {
   ]);
 
   return {
-    dateISO: isoDate,
-    dateLabelHe: formatDateHe(isoDate),
-    dateLabelEn: formatDateEn(isoDate),
+    weekStartISO: startISO,
+    weekEndISO: endISO,
+    rangeLabelHe: formatDateRangeHe(startISO, endISO),
+    rangeLabelEn: formatDateRangeEn(startISO, endISO),
     newUsers,
     itemsCreated,
     errors,

@@ -78,7 +78,12 @@ async function send() {
       await recordFailure(`resend: ${error.name} ${error.message}`);
       return NextResponse.json({ error: 'send_failed', detail: error.message }, { status: 502 });
     }
-    return NextResponse.json({ ok: true, dateISO: digest.dateISO, id: data?.id });
+    return NextResponse.json({
+      ok: true,
+      weekStartISO: digest.weekStartISO,
+      weekEndISO: digest.weekEndISO,
+      id: data?.id,
+    });
   } catch (err) {
     const msg = String((err as Error)?.message ?? err);
     await recordFailure(`resend exception: ${msg}`);
