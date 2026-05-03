@@ -23,10 +23,95 @@ export default async function UsersPage() {
       {users.length === 0 ? (
         <EmptyState message={t('empty')} />
       ) : (
-        <div className="rounded-[var(--radius-card)] bg-surface shadow-wallet overflow-hidden">
-          <UsersTable users={users} locale={locale} t={t} />
-        </div>
+        <>
+          <div className="hidden md:block rounded-[var(--radius-card)] bg-surface shadow-wallet overflow-hidden">
+            <UsersTable users={users} locale={locale} t={t} />
+          </div>
+          <div className="md:hidden space-y-3">
+            {users.map((u) => (
+              <UserCard key={u.uid} user={u} locale={locale} t={t} />
+            ))}
+          </div>
+        </>
       )}
+    </div>
+  );
+}
+
+function UserCard({
+  user: u,
+  locale,
+  t,
+}: {
+  user: UserRow;
+  locale: string;
+  t: Awaited<ReturnType<typeof getTranslations<'users'>>>;
+}) {
+  return (
+    <article className="rounded-[var(--radius-card)] bg-surface shadow-wallet p-4">
+      <header className="flex items-center gap-3 mb-3">
+        <Avatar src={u.photoURL} name={u.displayName ?? u.email ?? '?'} />
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-1.5 min-w-0">
+            <h3 className="font-semibold truncate">{u.displayName ?? '—'}</h3>
+            {u.isFamilyAdmin && <Crown size={12} className="text-primary shrink-0" aria-label="admin" />}
+          </div>
+          <p className="text-text-tertiary text-xs truncate" dir="ltr">
+            {u.email ?? '—'}
+          </p>
+        </div>
+        {u.platform === 'ios' ? (
+          <Apple size={16} className="text-text-secondary shrink-0" aria-label="iOS" />
+        ) : u.platform === 'android' ? (
+          <Smartphone size={16} className="text-text-secondary shrink-0" aria-label="Android" />
+        ) : null}
+      </header>
+
+      <dl className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs mb-3">
+        <CardRow label={t('cols.signedUp')} value={relativeTime(u.createdAt, locale)} />
+        <CardRow label={t('cols.lastActive')} value={relativeTime(u.lastSignInAt, locale)} />
+        <CardRow
+          label={t('cols.locale')}
+          value={u.locale ? u.locale.toUpperCase() : '—'}
+        />
+        <CardRow
+          label={t('cols.family')}
+          value={u.family ? `${u.family.name} (${u.family.size})` : '—'}
+        />
+      </dl>
+
+      <div className="grid grid-cols-3 gap-2 pt-3 border-t border-separator">
+        <CountPill label={t('cols.credits')} value={u.counts.credits} />
+        <CountPill label={t('cols.warranties')} value={u.counts.warranties} />
+        <CountPill label={t('cols.subscriptions')} value={u.counts.subscriptions} />
+        <CountPill label={t('cols.occasions')} value={u.counts.occasions} />
+        <CountPill label={t('cols.documents')} value={u.counts.documents} />
+        <CountPill label={t('cols.total')} value={u.totalItems} highlight />
+      </div>
+    </article>
+  );
+}
+
+function CardRow({ label, value }: { label: string; value: React.ReactNode }) {
+  return (
+    <div className="flex items-baseline gap-1 min-w-0">
+      <dt className="text-text-tertiary truncate">{label}:</dt>
+      <dd className="font-medium truncate">{value}</dd>
+    </div>
+  );
+}
+
+function CountPill({ label, value, highlight }: { label: string; value: number; highlight?: boolean }) {
+  return (
+    <div
+      className={`rounded-lg px-2 py-1.5 text-center ${
+        highlight ? 'bg-primary-surface text-primary' : 'bg-separator/50'
+      }`}
+    >
+      <div className={`text-base font-bold ${value === 0 && !highlight ? 'text-text-tertiary' : ''}`}>
+        {value}
+      </div>
+      <div className="text-[10px] text-text-secondary truncate">{label}</div>
     </div>
   );
 }

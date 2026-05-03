@@ -5,6 +5,8 @@ const PUBLIC_PATHS = [
   '/login',
   '/api/auth/session',
   '/api/auth/sign-out',
+  // Cron endpoints authenticate via the CRON_SECRET header, not the session cookie.
+  '/api/cron',
 ];
 
 function isPublicPath(pathname: string): boolean {

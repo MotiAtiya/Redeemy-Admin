@@ -70,6 +70,15 @@
     "invalidAmount": "Invalid amount",
     "saveFailed": "Save failed. Please try again."
   },
+  "errors": {
+    "pageError": {
+      "title": "Something went wrong",
+      "body": "An error occurred while loading the page. You can retry or go back home.",
+      "retry": "Try again",
+      "home": "Back home",
+      "referenceId": "Error ID"
+    }
+  },
   "users": {
     "title": "Users",
     "subtitle": "{count, plural, =0 {No users yet} one {# user} other {# users}}",
