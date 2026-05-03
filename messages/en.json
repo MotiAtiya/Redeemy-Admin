@@ -10,6 +10,11 @@
     "cancel": "Cancel",
     "loading": "Loading..."
   },
+  "nav": {
+    "home": "Home",
+    "users": "Users",
+    "activity": "Activity"
+  },
   "auth": {
     "title": "Redeemy Admin",
     "subtitle": "Admin area. Only authorized accounts can sign in.",
@@ -22,6 +27,62 @@
   },
   "home": {
     "welcome": "Welcome, {name}",
-    "placeholder": "The dashboard will live here. For now — just the Story 18.1 foundation shell."
+    "intro": "Quick overview — zoom in on users and live activity.",
+    "cards": {
+      "users": {
+        "title": "Users",
+        "subtitle": "Total"
+      },
+      "activity": {
+        "title": "Activity today",
+        "subtitle": "Events since midnight"
+      }
+    }
+  },
+  "users": {
+    "title": "Users",
+    "subtitle": "{count, plural, =0 {No users yet} one {# user} other {# users}}",
+    "empty": "No users yet. Once someone signs up — they'll show up here.",
+    "cols": {
+      "user": "User",
+      "signedUp": "Signed up",
+      "lastActive": "Last active",
+      "platform": "Platform",
+      "locale": "Locale",
+      "family": "Family",
+      "credits": "Credits",
+      "warranties": "Warranties",
+      "subscriptions": "Subscriptions",
+      "occasions": "Occasions",
+      "documents": "Documents",
+      "total": "Total"
+    }
+  },
+  "activity": {
+    "title": "Recent activity",
+    "subtitle": "{count, plural, =0 {No events yet} one {# event} other {# recent events}}",
+    "empty": {
+      "title": "No events yet.",
+      "hint": "Events will show up here as users open the app or perform actions."
+    },
+    "events": {
+      "sign_in": "signed in",
+      "sign_up": "signed up",
+      "sign_out": "signed out",
+      "app_opened": "opened the app",
+      "item_created": "created",
+      "item_updated": "updated",
+      "item_deleted": "deleted",
+      "family_created": "created a family",
+      "family_joined": "joined a family",
+      "family_left": "left a family"
+    },
+    "categories": {
+      "credit": "credit",
+      "warranty": "warranty",
+      "subscription": "subscription",
+      "occasion": "occasion",
+      "document": "document"
+    }
   }
 }
