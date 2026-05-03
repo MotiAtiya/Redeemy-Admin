@@ -39,6 +39,37 @@
       }
     }
   },
+  "health": {
+    "allSystemsNormal": "All systems normal",
+    "issuesDetected": "Issues detected",
+    "criticalIssue": "Critical issue",
+    "noActivity": "No user activity in the last 24 hours",
+    "firestoreWriteFailures": "{count, plural, one {# write failure} other {# write failures}}",
+    "imageUploadFailures": "{count, plural, one {# image upload failure} other {# image upload failures}}",
+    "details": {
+      "firestoreWriteFailures1h": "Write failures (last hour)",
+      "firestoreWriteFailures24h": "Write failures (last 24h)",
+      "imageUploadFailures1h": "Image-upload failures (last hour)",
+      "imageUploadFailures24h": "Image-upload failures (last 24h)",
+      "recentErrorsHeading": "{count, plural, =0 {No recent errors} one {# recent error} other {# recent errors}}",
+      "firestore_write_failed": "Firestore write failed",
+      "image_upload_failed": "Image upload failed"
+    }
+  },
+  "cost": {
+    "title": "Firebase cost",
+    "subtitle": "this month (USD)",
+    "perActiveUser": "Per active user ({count})",
+    "at10x": "At 10× users",
+    "notSet": "Not set yet. Click the pencil to enter the amount.",
+    "editAria": "Edit cost",
+    "editTitle": "Edit this month's cost",
+    "editForMonth": "Month: {monthYear}",
+    "amountLabel": "Amount in USD",
+    "save": "Save",
+    "invalidAmount": "Invalid amount",
+    "saveFailed": "Save failed. Please try again."
+  },
   "users": {
     "title": "Users",
     "subtitle": "{count, plural, =0 {No users yet} one {# user} other {# users}}",
@@ -78,6 +109,8 @@
       "credit_expired": "credit expired",
       "subscription_cancelled": "cancelled a subscription",
       "warranty_closed": "closed a warranty",
+      "firestore_write_failed": "Firestore write failed",
+      "image_upload_failed": "image upload failed",
       "family_created": "created a family",
       "family_joined": "joined a family",
       "family_left": "left a family"

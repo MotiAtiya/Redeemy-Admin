@@ -16,7 +16,14 @@ export type EventType =
   | 'family_created'
   | 'family_joined'
   | 'family_left'
+  | 'firestore_write_failed'
+  | 'image_upload_failed'
   | 'app_opened';
+
+export const ERROR_EVENT_TYPES: ReadonlySet<EventType> = new Set([
+  'firestore_write_failed',
+  'image_upload_failed',
+]);
 
 export type ItemCategory = 'credit' | 'warranty' | 'subscription' | 'occasion' | 'document';
 

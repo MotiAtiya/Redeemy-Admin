@@ -6,6 +6,7 @@ import { SESSION_COOKIE_NAME, verifySession } from '@/lib/session';
 import { loadUserCount } from '@/lib/users';
 import { loadEventsTodayCount } from '@/lib/events';
 import { getLocale } from 'next-intl/server';
+import CostWidget from '@/components/CostWidget';
 
 export const revalidate = 60;
 
@@ -31,7 +32,7 @@ export default async function HomePage() {
         <p className="text-text-secondary text-sm">{t('intro')}</p>
       </header>
 
-      <div className="grid sm:grid-cols-2 gap-4">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <Link
           href="/users"
           className="group rounded-[var(--radius-card)] bg-surface shadow-wallet p-5 hover:shadow-md transition flex items-start gap-4"
@@ -65,6 +66,8 @@ export default async function HomePage() {
             <p className="text-xs text-text-secondary">{t('cards.activity.subtitle')}</p>
           </div>
         </Link>
+
+        <CostWidget />
       </div>
     </div>
   );

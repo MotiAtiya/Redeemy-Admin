@@ -39,6 +39,37 @@
       }
     }
   },
+  "health": {
+    "allSystemsNormal": "כל המערכות תקינות",
+    "issuesDetected": "זוהו בעיות",
+    "criticalIssue": "תקלה חמורה",
+    "noActivity": "אין פעילות מהמשתמשים ב-24 שעות האחרונות",
+    "firestoreWriteFailures": "{count, plural, one {# כשל כתיבה} two {2 כשלי כתיבה} other {# כשלי כתיבה}}",
+    "imageUploadFailures": "{count, plural, one {# כשל העלאת תמונה} two {2 כשלי העלאת תמונה} other {# כשלי העלאת תמונה}}",
+    "details": {
+      "firestoreWriteFailures1h": "כשלי כתיבה בשעה האחרונה",
+      "firestoreWriteFailures24h": "כשלי כתיבה ב-24 שעות",
+      "imageUploadFailures1h": "כשלי העלאת תמונה בשעה האחרונה",
+      "imageUploadFailures24h": "כשלי העלאת תמונה ב-24 שעות",
+      "recentErrorsHeading": "{count, plural, =0 {אין שגיאות אחרונות} one {שגיאה אחרונה} other {# שגיאות אחרונות}}",
+      "firestore_write_failed": "כשל בכתיבה ל-Firestore",
+      "image_upload_failed": "כשל בהעלאת תמונה"
+    }
+  },
+  "cost": {
+    "title": "עלות Firebase",
+    "subtitle": "החודש (USD)",
+    "perActiveUser": "עלות למשתמש פעיל ({count})",
+    "at10x": "ב-10× משתמשים",
+    "notSet": "טרם הוזנה. לחץ על העיפרון להזנה.",
+    "editAria": "עריכת עלות",
+    "editTitle": "עריכת עלות החודש",
+    "editForMonth": "חודש: {monthYear}",
+    "amountLabel": "סכום ב-USD",
+    "save": "שמור",
+    "invalidAmount": "סכום לא תקין",
+    "saveFailed": "השמירה נכשלה. נסה שוב."
+  },
   "users": {
     "title": "משתמשים",
     "subtitle": "{count, plural, =0 {אין משתמשים עדיין} one {משתמש אחד} two {2 משתמשים} other {# משתמשים}}",
@@ -78,6 +109,8 @@
       "credit_expired": "זיכוי פג תוקף",
       "subscription_cancelled": "ביטל מנוי",
       "warranty_closed": "סגר אחריות",
+      "firestore_write_failed": "כשל בכתיבה ל-Firestore",
+      "image_upload_failed": "כשל בהעלאת תמונה",
       "family_created": "יצר משפחה",
       "family_joined": "הצטרף למשפחה",
       "family_left": "עזב משפחה"

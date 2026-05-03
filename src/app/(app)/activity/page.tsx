@@ -18,6 +18,8 @@ import {
   Ban,
   Archive,
   Hourglass,
+  AlertTriangle,
+  ImageOff,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { loadEvents, type AppEvent, type EventType, type ItemCategory } from '@/lib/events';
@@ -39,6 +41,8 @@ const EVENT_ICON: Record<EventType, LucideIcon> = {
   family_created: Users,
   family_joined: Users,
   family_left: Users,
+  firestore_write_failed: AlertTriangle,
+  image_upload_failed: ImageOff,
   app_opened: Smartphone,
 };
 
@@ -138,6 +142,8 @@ function describeEvent(
     case 'credit_expired':
     case 'subscription_cancelled':
     case 'warranty_closed':
+    case 'firestore_write_failed':
+    case 'image_upload_failed':
       return t(`events.${e.type}`);
     case 'item_created':
     case 'item_updated':
