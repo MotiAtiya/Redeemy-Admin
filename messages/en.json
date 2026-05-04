@@ -137,9 +137,34 @@
   "activity": {
     "title": "Recent activity",
     "subtitle": "{count, plural, =0 {No events yet} one {# event} other {# recent events}}",
+    "subtitleFiltered": "Showing {filtered} of {total} events",
     "empty": {
       "title": "No events yet.",
-      "hint": "Events will show up here as users open the app or perform actions."
+      "hint": "Events will show up here as users open the app or perform actions.",
+      "filtered": "No events match the current filters."
+    },
+    "filters": {
+      "searchPlaceholder": "Search by name or UID...",
+      "clearSearch": "Clear search",
+      "clearAll": "Clear all",
+      "typeLabel": "Event type",
+      "rangeLabel": "Time range",
+      "type": {
+        "all": "All events",
+        "auth": "Sign in / out",
+        "items": "Items (create / update / delete)",
+        "status": "Status changes",
+        "family": "Family",
+        "errors": "Errors",
+        "lifecycle": "App opens"
+      },
+      "range": {
+        "all": "All time",
+        "lastHour": "Last hour",
+        "today": "Today",
+        "last24h": "Last 24 hours",
+        "thisWeek": "This week"
+      }
     },
     "events": {
       "sign_in": "signed in",
