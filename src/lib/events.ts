@@ -13,6 +13,7 @@ export type EventType =
   | 'credit_expired'
   | 'subscription_cancelled'
   | 'warranty_closed'
+  | 'warranty_expired'
   | 'family_created'
   | 'family_joined'
   | 'family_left'

@@ -36,6 +36,7 @@ const EVENT_ICON: Record<EventType, LucideIcon> = {
   credit_expired: Hourglass,
   subscription_cancelled: Ban,
   warranty_closed: Archive,
+  warranty_expired: Hourglass,
   family_created: Users,
   family_joined: Users,
   family_left: Users,
@@ -99,6 +100,7 @@ function describeEvent(
     case 'credit_expired':
     case 'subscription_cancelled':
     case 'warranty_closed':
+    case 'warranty_expired':
     case 'firestore_write_failed':
     case 'image_upload_failed':
       return t(`events.${e.type}`);

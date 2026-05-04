@@ -179,6 +179,7 @@
       "credit_expired": "credit expired",
       "subscription_cancelled": "cancelled a subscription",
       "warranty_closed": "closed a warranty",
+      "warranty_expired": "warranty expired",
       "firestore_write_failed": "Firestore write failed",
       "image_upload_failed": "image upload failed",
       "family_created": "created a family",

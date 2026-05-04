@@ -17,6 +17,7 @@ export const TYPE_GROUPS: Record<TypeGroup, EventType[] | null> = {
     'credit_expired',
     'subscription_cancelled',
     'warranty_closed',
+    'warranty_expired',
   ],
   family: ['family_created', 'family_joined', 'family_left'],
   errors: ['firestore_write_failed', 'image_upload_failed'],
