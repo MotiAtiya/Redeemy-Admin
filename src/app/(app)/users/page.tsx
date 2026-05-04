@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { getTranslations, getLocale } from 'next-intl/server';
 import { Apple, Smartphone, Crown } from 'lucide-react';
 import { loadUsers, type UserRow } from '@/lib/users';
@@ -48,7 +49,10 @@ function UserCard({
   t: Awaited<ReturnType<typeof getTranslations<'users'>>>;
 }) {
   return (
-    <article className="rounded-[var(--radius-card)] bg-surface shadow-wallet p-4">
+    <Link
+      href={`/users/${u.uid}`}
+      className="block rounded-[var(--radius-card)] bg-surface shadow-wallet p-4 hover:shadow-md transition"
+    >
       <header className="flex items-center gap-3 mb-3">
         <Avatar src={u.photoURL} name={u.displayName ?? u.email ?? '?'} />
         <div className="min-w-0 flex-1">
@@ -88,7 +92,7 @@ function UserCard({
         <CountPill label={t('cols.documents')} value={u.counts.documents} />
         <CountPill label={t('cols.total')} value={u.totalItems} highlight />
       </div>
-    </article>
+    </Link>
   );
 }
 
@@ -154,7 +158,7 @@ function UsersTable({ users, locale, t }: UsersTableProps) {
           {users.map((u) => (
             <tr key={u.uid} className="border-t border-separator hover:bg-separator/30 transition">
               <Td>
-                <div className="flex items-center gap-3 min-w-0">
+                <Link href={`/users/${u.uid}`} className="flex items-center gap-3 min-w-0 -mx-3 -my-2.5 px-3 py-2.5 hover:text-primary transition">
                   <Avatar src={u.photoURL} name={u.displayName ?? u.email ?? '?'} />
                   <div className="min-w-0">
                     <div className="font-medium truncate">{u.displayName ?? '—'}</div>
@@ -162,7 +166,7 @@ function UsersTable({ users, locale, t }: UsersTableProps) {
                       {u.email ?? '—'}
                     </div>
                   </div>
-                </div>
+                </Link>
               </Td>
               <Td>{relativeTime(u.createdAt, locale)}</Td>
               <Td>{relativeTime(u.lastSignInAt, locale)}</Td>

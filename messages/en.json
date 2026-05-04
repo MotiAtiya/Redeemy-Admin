@@ -81,6 +81,33 @@
       "referenceId": "Error ID"
     }
   },
+  "userDetail": {
+    "title": "User profile",
+    "backToList": "Back to users",
+    "notFound": "User not found",
+    "copyUid": "Copy UID",
+    "disabled": "Disabled",
+    "signedUp": "Signed up",
+    "lastActive": "Last active",
+    "providers": "Providers",
+    "platform": "Platform",
+    "locale": "Locale",
+    "appVersion": "App version",
+    "noFamily": "Not in a family",
+    "admin": "Admin",
+    "noItems": "No items in this category",
+    "noActivity": "No recent activity for this user",
+    "totalLabel": "of {count} total",
+    "createdAt": "Created",
+    "costMonthlyShare": "Approximate cost share this month: {amount}",
+    "sections": {
+      "profile": "Profile",
+      "family": "Family",
+      "items": "Items",
+      "activity": "{count, plural, =0 {No activity} one {# recent event} other {# recent events}}",
+      "cost": "Cost"
+    }
+  },
   "users": {
     "title": "Users",
     "subtitle": "{count, plural, =0 {No users yet} one {# user} other {# users}}",

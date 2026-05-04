@@ -81,6 +81,33 @@
       "referenceId": "מזהה שגיאה"
     }
   },
+  "userDetail": {
+    "title": "פרופיל משתמש",
+    "backToList": "חזרה לרשימה",
+    "notFound": "המשתמש לא נמצא",
+    "copyUid": "העתק UID",
+    "disabled": "מושבת",
+    "signedUp": "הצטרף",
+    "lastActive": "פעיל לאחרונה",
+    "providers": "אמצעי כניסה",
+    "platform": "פלטפורמה",
+    "locale": "שפה",
+    "appVersion": "גרסת אפליקציה",
+    "noFamily": "לא במשפחה",
+    "admin": "אדמין",
+    "noItems": "אין פריטים בקטגוריה",
+    "noActivity": "אין אירועים אחרונים למשתמש זה",
+    "totalLabel": "מתוך {count} כולל",
+    "createdAt": "נוצר",
+    "costMonthlyShare": "תרומה משוערת לעלות החודש: {amount}",
+    "sections": {
+      "profile": "פרופיל",
+      "family": "משפחה",
+      "items": "פריטים",
+      "activity": "{count, plural, =0 {אין פעילות} one {אירוע אחרון} other {# אירועים אחרונים}}",
+      "cost": "עלות"
+    }
+  },
   "users": {
     "title": "משתמשים",
     "subtitle": "{count, plural, =0 {אין משתמשים עדיין} one {משתמש אחד} two {2 משתמשים} other {# משתמשים}}",
