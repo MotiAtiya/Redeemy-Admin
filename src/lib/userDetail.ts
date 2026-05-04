@@ -188,10 +188,12 @@ async function fetchCategoryStats(uid: string, category: ItemCategory): Promise<
     activeCount = items.filter((i) => !i.status || i.status === 'active').length;
   }
 
+  // Send up to 100 most-recent items so the UI can offer "show all". The
+  // initial render still shows just the first few — see CategoryCardClient.
   const recent = items
     .slice()
     .sort((a, b) => (b.createdAt ?? 0) - (a.createdAt ?? 0))
-    .slice(0, 5);
+    .slice(0, 100);
 
   return { totalCount: items.length, activeCount, recent };
 }

@@ -8,7 +8,13 @@
     "password": "סיסמה",
     "language": "שפה",
     "cancel": "ביטול",
-    "loading": "טוען..."
+    "loading": "טוען...",
+    "theme": {
+      "auto": "אוטומטי",
+      "light": "בהיר",
+      "dark": "כהה",
+      "toggleAriaLabel": "ערכת נושא: {current} — לחץ להחלפה"
+    }
   },
   "nav": {
     "home": "בית",
@@ -99,6 +105,8 @@
     "noActivity": "אין אירועים אחרונים למשתמש זה",
     "totalLabel": "מתוך {count} כולל",
     "createdAt": "נוצר",
+    "showAll": "הצג עוד {count}",
+    "showLess": "הצג פחות",
     "costMonthlyShare": "תרומה משוערת לעלות החודש: {amount}",
     "sections": {
       "profile": "פרופיל",
@@ -132,6 +140,14 @@
       "occasions": "אירועים",
       "documents": "מסמכים",
       "total": "סה״כ"
+    },
+    "sort": {
+      "label": "מיון",
+      "recent": "פעיל לאחרונה",
+      "joined": "הצטרפו לאחרונה",
+      "name": "שם (א-ת)",
+      "name-desc": "שם (ת-א)",
+      "items": "הכי הרבה פריטים"
     }
   },
   "activity": {

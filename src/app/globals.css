@@ -1,6 +1,17 @@
 @import "tailwindcss";
 
-/* ─── Redeemy Sage palette (matches mobile app src/constants/colors.ts) ─── */
+/* ─── Redeemy palette (matches mobile app src/constants/colors.ts) ─── */
+/*
+ * Theme strategy:
+ *   - :root holds the light palette as the default.
+ *   - prefers-color-scheme: dark applies the dark palette automatically,
+ *     UNLESS the user has explicitly chosen 'light' (data-theme="light").
+ *   - data-theme="dark" forces dark regardless of OS setting.
+ *
+ * The ThemeToggle client component writes/reads localStorage('theme') and
+ * sets data-theme on <html>. An inline script in layout.tsx applies the
+ * stored choice before paint to avoid FOUC.
+ */
 :root {
   /* Surfaces */
   --background: #F0FDFA;
@@ -31,6 +42,57 @@
   --urgency-green-surface: #DCFCE7;
 
   --foreground: var(--text-primary);
+  color-scheme: light;
+}
+
+/* Dark palette — mirrors mobile darkColors. Applied either when the user
+ * explicitly chose dark, OR when the OS prefers dark and the user hasn't
+ * overridden it. */
+:root[data-theme="dark"],
+:root.theme-dark {
+  --background: #0D1F1E;
+  --surface: #172928;
+  --surface-elevated: #1E3432;
+  --text-primary: #F0FDFA;
+  --text-secondary: #94A3B8;
+  --text-tertiary: #64748B;
+  --separator: #243432;
+  --primary: #6FAEA4;
+  --primary-surface: #1A3A38;
+  --icon-active: #6FAEA4;
+  --icon-inactive: #64748B;
+  --danger: #EF5350;
+  --urgency-red: #EF5350;
+  --urgency-amber: #F59E0B;
+  --urgency-green: #4ADE80;
+  --urgency-red-surface: #3B1212;
+  --urgency-amber-surface: #3B2A0A;
+  --urgency-green-surface: #0D2B1A;
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --background: #0D1F1E;
+    --surface: #172928;
+    --surface-elevated: #1E3432;
+    --text-primary: #F0FDFA;
+    --text-secondary: #94A3B8;
+    --text-tertiary: #64748B;
+    --separator: #243432;
+    --primary: #6FAEA4;
+    --primary-surface: #1A3A38;
+    --icon-active: #6FAEA4;
+    --icon-inactive: #64748B;
+    --danger: #EF5350;
+    --urgency-red: #EF5350;
+    --urgency-amber: #F59E0B;
+    --urgency-green: #4ADE80;
+    --urgency-red-surface: #3B1212;
+    --urgency-amber-surface: #3B2A0A;
+    --urgency-green-surface: #0D2B1A;
+    color-scheme: dark;
+  }
 }
 
 @theme inline {

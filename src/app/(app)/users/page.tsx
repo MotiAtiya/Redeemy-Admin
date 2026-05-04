@@ -2,13 +2,39 @@ import Link from 'next/link';
 import { getTranslations, getLocale } from 'next-intl/server';
 import { Apple, Smartphone, Crown } from 'lucide-react';
 import { loadUsers, type UserRow } from '@/lib/users';
+import UsersSortControl, { type SortKey, SORT_KEYS, DEFAULT_SORT } from './UsersSortControl';
 
 export const revalidate = 60;
 
-export default async function UsersPage() {
+interface PageProps {
+  searchParams: Promise<{ sort?: string }>;
+}
+
+function sortUsers(users: UserRow[], key: SortKey): UserRow[] {
+  const copy = users.slice();
+  switch (key) {
+    case 'name':
+      return copy.sort((a, b) => (a.displayName ?? '').localeCompare(b.displayName ?? ''));
+    case 'name-desc':
+      return copy.sort((a, b) => (b.displayName ?? '').localeCompare(a.displayName ?? ''));
+    case 'joined':
+      return copy.sort((a, b) => (b.createdAt ?? 0) - (a.createdAt ?? 0));
+    case 'items':
+      return copy.sort((a, b) => b.totalItems - a.totalItems);
+    case 'recent':
+    default:
+      return copy.sort((a, b) => (b.lastSignInAt ?? 0) - (a.lastSignInAt ?? 0));
+  }
+}
+
+export default async function UsersPage({ searchParams }: PageProps) {
   const t = await getTranslations('users');
   const locale = await getLocale();
-  const users = await loadUsers();
+  const sp = await searchParams;
+  const sortKey: SortKey = (SORT_KEYS as readonly string[]).includes(sp.sort ?? '')
+    ? (sp.sort as SortKey)
+    : DEFAULT_SORT;
+  const users = sortUsers(await loadUsers(), sortKey);
 
   return (
     <div className="space-y-6">
@@ -19,6 +45,7 @@ export default async function UsersPage() {
             {t('subtitle', { count: users.length })}
           </p>
         </div>
+        {users.length > 1 && <UsersSortControl />}
       </header>
 
       {users.length === 0 ? (

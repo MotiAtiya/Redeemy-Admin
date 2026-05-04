@@ -8,7 +8,13 @@
     "password": "Password",
     "language": "Language",
     "cancel": "Cancel",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "theme": {
+      "auto": "Auto",
+      "light": "Light",
+      "dark": "Dark",
+      "toggleAriaLabel": "Theme: {current} — click to change"
+    }
   },
   "nav": {
     "home": "Home",
@@ -96,6 +102,8 @@
     "noFamily": "Not in a family",
     "admin": "Admin",
     "noItems": "No items in this category",
+    "showAll": "Show {count} more",
+    "showLess": "Show less",
     "noActivity": "No recent activity for this user",
     "totalLabel": "of {count} total",
     "createdAt": "Created",
@@ -132,6 +140,14 @@
       "occasions": "Occasions",
       "documents": "Documents",
       "total": "Total"
+    },
+    "sort": {
+      "label": "Sort",
+      "recent": "Recently active",
+      "joined": "Recently joined",
+      "name": "Name (A–Z)",
+      "name-desc": "Name (Z–A)",
+      "items": "Most items"
     }
   },
   "activity": {

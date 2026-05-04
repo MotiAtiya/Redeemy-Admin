@@ -1,5 +1,6 @@
 import { useTranslations } from 'next-intl';
 import LocaleToggle from './LocaleToggle';
+import ThemeToggle from './ThemeToggle';
 import UserMenu from './UserMenu';
 import NavLinks from './NavLinks';
 
@@ -21,6 +22,7 @@ export default function TopBar({ email }: TopBarProps) {
           <NavLinks />
         </div>
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          <ThemeToggle />
           <LocaleToggle />
           <UserMenu email={email} />
         </div>

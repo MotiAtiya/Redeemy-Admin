@@ -1,5 +1,6 @@
 'use client';
 import { useMemo } from 'react';
+import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import {
@@ -147,7 +148,16 @@ function EventRow({ event, locale }: { event: AppEvent; locale: string }) {
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="font-medium truncate">{event.userName ?? event.userId}</span>
+          {event.userId && event.userId !== 'anon' ? (
+            <Link
+              href={`/users/${event.userId}`}
+              className="font-medium truncate hover:text-primary hover:underline transition"
+            >
+              {event.userName ?? event.userId}
+            </Link>
+          ) : (
+            <span className="font-medium truncate">{event.userName ?? event.userId}</span>
+          )}
           {CategoryIcon && <CategoryIcon size={14} className="text-text-tertiary" aria-hidden />}
           <span className="text-text-secondary text-sm truncate">{description}</span>
         </div>

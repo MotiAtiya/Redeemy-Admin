@@ -19,12 +19,13 @@ import {
   ShieldAlert,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
-import { loadUserDetail, type CategoryStats, type ItemSummary, type UserDetail } from '@/lib/userDetail';
+import { loadUserDetail, type CategoryStats, type UserDetail } from '@/lib/userDetail';
 import { getCostSnapshot } from '@/lib/cost';
 import type { ItemCategory } from '@/lib/events';
 import type { AppEvent } from '@/lib/events';
 import CopyUidButton from '@/components/CopyUidButton';
 import UserDetailEventRow from './UserDetailEventRow';
+import CategoryItemsList from './CategoryItemsList';
 
 export const revalidate = 60;
 
@@ -75,7 +76,7 @@ export default async function UserDetailPage({ params }: PageProps) {
       <BackLink locale={locale} label={t('backToList')} />
 
       <ProfileHeader detail={detail} t={t} tUsers={tUsers} locale={locale} />
-      <FamilyCard family={detail.family} t={t} />
+      <FamilyCard family={detail.family} currentUid={detail.auth.uid} t={t} />
       <ItemsGrid items={detail.itemsByCategory} t={t} tUsers={tUsers} locale={locale} />
       <ActivitySection events={detail.events} t={t} locale={locale} />
       {costContribution !== null && <CostContributionCard contribution={costContribution} t={t} />}
@@ -135,8 +136,9 @@ function ProfileHeader({
         <div className="flex-1 min-w-0">
           <h1 className="text-2xl sm:text-3xl font-bold truncate">{auth.displayName ?? '—'}</h1>
           {auth.email && (
-            <p className="text-sm text-text-secondary truncate" dir="ltr">
-              <Mail size={12} className="inline-block me-1" aria-hidden /> {auth.email}
+            <p className="text-sm text-text-secondary truncate">
+              <Mail size={12} className="inline-block me-1" aria-hidden />
+              <span dir="ltr">{auth.email}</span>
             </p>
           )}
           <div className="mt-2 flex items-center gap-2 flex-wrap">
@@ -188,9 +190,11 @@ function ProfileHeader({
 
 function FamilyCard({
   family,
+  currentUid,
   t,
 }: {
   family: UserDetail['family'];
+  currentUid: string;
   t: Awaited<ReturnType<typeof getTranslations<'userDetail'>>>;
 }) {
   return (
@@ -211,13 +215,30 @@ function FamilyCard({
             )}
           </div>
           <ul className="grid sm:grid-cols-2 gap-2">
-            {family.members.map((m) => (
-              <li key={m.uid} className="flex items-center gap-2 min-w-0">
-                <Avatar src={m.photoURL} name={m.displayName} size={28} />
-                <span className="font-medium truncate">{m.displayName}</span>
-                {m.isAdmin && <Crown size={11} className="text-primary shrink-0" aria-label="admin" />}
-              </li>
-            ))}
+            {family.members.map((m) => {
+              const isSelf = m.uid === currentUid;
+              const inner = (
+                <>
+                  <Avatar src={m.photoURL} name={m.displayName} size={28} />
+                  <span className="font-medium truncate">{m.displayName}</span>
+                  {m.isAdmin && <Crown size={11} className="text-primary shrink-0" aria-label="admin" />}
+                </>
+              );
+              return (
+                <li key={m.uid}>
+                  {isSelf ? (
+                    <div className="flex items-center gap-2 min-w-0">{inner}</div>
+                  ) : (
+                    <Link
+                      href={`/users/${m.uid}`}
+                      className="flex items-center gap-2 min-w-0 -mx-2 -my-1 px-2 py-1 rounded-md hover:bg-separator/50 hover:text-primary transition"
+                    >
+                      {inner}
+                    </Link>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}
@@ -294,44 +315,9 @@ function CategoryCard({
       {stats.recent.length === 0 ? (
         <p className="text-xs text-text-tertiary">{t('noItems')}</p>
       ) : (
-        <ul className="space-y-1.5 text-xs">
-          {stats.recent.map((item) => (
-            <RecentItemRow key={item.id} item={item} locale={locale} t={t} />
-          ))}
-        </ul>
+        <CategoryItemsList items={stats.recent} locale={locale} />
       )}
     </article>
-  );
-}
-
-function RecentItemRow({
-  item,
-  locale,
-  t,
-}: {
-  item: ItemSummary;
-  locale: string;
-  t: Awaited<ReturnType<typeof getTranslations<'userDetail'>>>;
-}) {
-  const isInactive = item.status && item.status !== 'active';
-  // Translate the optional type prefix (e.g. document type "license" → "רישיון")
-  // and prepend it. The base title contains user-typed text only.
-  const prefix = item.typeKey
-    ? t(item.typeKey as Parameters<typeof t>[0]) + (item.title ? ' · ' : '')
-    : '';
-  const display = `${prefix}${item.title}`;
-  return (
-    <li className="flex items-baseline gap-2 min-w-0">
-      <span
-        className={`flex-1 truncate ${isInactive ? 'text-text-tertiary line-through' : ''}`}
-        title={display}
-      >
-        {display}
-      </span>
-      <span className="text-text-tertiary text-[10px] shrink-0" title={t('createdAt')}>
-        {item.createdAt ? relativeTime(item.createdAt, locale) : '—'}
-      </span>
-    </li>
   );
 }
 
