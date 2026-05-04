@@ -182,6 +182,7 @@
       "subscription_expired": "מנוי פג תוקף",
       "warranty_closed": "סגר אחריות",
       "warranty_expired": "אחריות פגה תוקף",
+      "document_renewed": "חידש מסמך",
       "firestore_write_failed": "כשל בכתיבה ל-Firestore",
       "image_upload_failed": "כשל בהעלאת תמונה",
       "family_created": "יצר משפחה",

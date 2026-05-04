@@ -17,6 +17,7 @@ import {
   Ban,
   Archive,
   Hourglass,
+  RefreshCw,
   AlertTriangle,
   ImageOff,
 } from 'lucide-react';
@@ -39,6 +40,7 @@ const EVENT_ICON: Record<EventType, LucideIcon> = {
   subscription_expired: Hourglass,
   warranty_closed: Archive,
   warranty_expired: Hourglass,
+  document_renewed: RefreshCw,
   family_created: Users,
   family_joined: Users,
   family_left: Users,
@@ -105,6 +107,7 @@ function describeEvent(
     case 'subscription_expired':
     case 'warranty_closed':
     case 'warranty_expired':
+    case 'document_renewed':
     case 'firestore_write_failed':
     case 'image_upload_failed':
       return t(`events.${e.type}`);

@@ -182,6 +182,7 @@
       "subscription_expired": "subscription expired",
       "warranty_closed": "closed a warranty",
       "warranty_expired": "warranty expired",
+      "document_renewed": "renewed a document",
       "firestore_write_failed": "Firestore write failed",
       "image_upload_failed": "image upload failed",
       "family_created": "created a family",
