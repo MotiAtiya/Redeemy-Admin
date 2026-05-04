@@ -2,7 +2,8 @@ import Link from 'next/link';
 import { getTranslations, getLocale } from 'next-intl/server';
 import { Apple, Smartphone, Crown } from 'lucide-react';
 import { loadUsers, type UserRow } from '@/lib/users';
-import UsersSortControl, { type SortKey, SORT_KEYS, DEFAULT_SORT } from './UsersSortControl';
+import UsersSortControl from './UsersSortControl';
+import { SORT_KEYS, DEFAULT_SORT, type SortKey } from './usersSort';
 
 export const revalidate = 60;
 

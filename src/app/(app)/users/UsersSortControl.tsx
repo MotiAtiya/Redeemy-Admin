@@ -3,11 +3,7 @@ import { useTransition } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { ArrowUpDown } from 'lucide-react';
-
-export type SortKey = 'recent' | 'joined' | 'name' | 'name-desc' | 'items';
-
-export const SORT_KEYS: SortKey[] = ['recent', 'joined', 'name', 'name-desc', 'items'];
-export const DEFAULT_SORT: SortKey = 'recent';
+import { SORT_KEYS, DEFAULT_SORT, type SortKey } from './usersSort';
 
 export default function UsersSortControl() {
   const t = useTranslations('users.sort');
