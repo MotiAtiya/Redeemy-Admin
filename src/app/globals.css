@@ -28,6 +28,10 @@
   --primary: #5F9E8F;
   --primary-surface: #CCFBF1;
 
+  /* Top bar (header) — mirrors mobile app's primary header */
+  --topbar-bg: var(--primary);
+  --topbar-fg: #FFFFFF;
+
   /* Icons */
   --icon-active: #5F9E8F;
   --icon-inactive: #9E9E9E;
@@ -59,6 +63,8 @@
   --separator: #243432;
   --primary: #6FAEA4;
   --primary-surface: #1A3A38;
+  --topbar-bg: #1E3432;
+  --topbar-fg: #F0FDFA;
   --icon-active: #6FAEA4;
   --icon-inactive: #64748B;
   --danger: #EF5350;
@@ -82,6 +88,8 @@
     --separator: #243432;
     --primary: #6FAEA4;
     --primary-surface: #1A3A38;
+    --topbar-bg: #1E3432;
+    --topbar-fg: #F0FDFA;
     --icon-active: #6FAEA4;
     --icon-inactive: #64748B;
     --danger: #EF5350;
@@ -106,6 +114,8 @@
   --color-separator: var(--separator);
   --color-primary: var(--primary);
   --color-primary-surface: var(--primary-surface);
+  --color-topbar-bg: var(--topbar-bg);
+  --color-topbar-fg: var(--topbar-fg);
   --color-icon-active: var(--icon-active);
   --color-icon-inactive: var(--icon-inactive);
   --color-danger: var(--danger);
