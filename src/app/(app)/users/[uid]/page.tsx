@@ -38,6 +38,16 @@ const CATEGORY_ICON: Record<ItemCategory, LucideIcon> = {
 
 const ITEM_CATEGORIES: ItemCategory[] = ['credit', 'warranty', 'subscription', 'occasion', 'document'];
 
+// Maps the singular category to the (existing) plural translation key under `users.cols.*`.
+// Lives here because just appending "s" breaks for warranty → warranties.
+const CATEGORY_LABEL_KEY: Record<ItemCategory, 'cols.credits' | 'cols.warranties' | 'cols.subscriptions' | 'cols.occasions' | 'cols.documents'> = {
+  credit: 'cols.credits',
+  warranty: 'cols.warranties',
+  subscription: 'cols.subscriptions',
+  occasion: 'cols.occasions',
+  document: 'cols.documents',
+};
+
 interface PageProps {
   params: Promise<{ uid: string }>;
 }
@@ -261,8 +271,7 @@ function CategoryCard({
   locale: string;
 }) {
   const Icon = CATEGORY_ICON[category];
-  const colKey = `cols.${category}s` as 'cols.credits' | 'cols.warranties' | 'cols.subscriptions' | 'cols.occasions' | 'cols.documents';
-  const label = tUsers(colKey);
+  const label = tUsers(CATEGORY_LABEL_KEY[category]);
 
   return (
     <article className="rounded-[var(--radius-card)] bg-surface shadow-wallet p-4">
@@ -305,13 +314,19 @@ function RecentItemRow({
   t: Awaited<ReturnType<typeof getTranslations<'userDetail'>>>;
 }) {
   const isInactive = item.status && item.status !== 'active';
+  // Translate the optional type prefix (e.g. document type "license" → "רישיון")
+  // and prepend it. The base title contains user-typed text only.
+  const prefix = item.typeKey
+    ? t(item.typeKey as Parameters<typeof t>[0]) + (item.title ? ' · ' : '')
+    : '';
+  const display = `${prefix}${item.title}`;
   return (
     <li className="flex items-baseline gap-2 min-w-0">
       <span
         className={`flex-1 truncate ${isInactive ? 'text-text-tertiary line-through' : ''}`}
-        title={item.title}
+        title={display}
       >
-        {item.title}
+        {display}
       </span>
       <span className="text-text-tertiary text-[10px] shrink-0" title={t('createdAt')}>
         {item.createdAt ? relativeTime(item.createdAt, locale) : '—'}

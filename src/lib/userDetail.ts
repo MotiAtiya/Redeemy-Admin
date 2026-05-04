@@ -36,6 +36,12 @@ export interface UserFamily {
 export interface ItemSummary {
   id: string;
   title: string;
+  /**
+   * Optional i18n key for a translated prefix prepended to the title at render
+   * time (e.g. "documentTypes.license" → "רישיון" / "License"). Null when the
+   * item is identified entirely by user-typed text.
+   */
+  typeKey: string | null;
   status: string | null;
   createdAt: number | null;
 }
@@ -67,7 +73,10 @@ function tsMillis(value: unknown): number | null {
   return null;
 }
 
-function extractItemTitle(category: ItemCategory, data: Record<string, unknown>): string {
+function extractItem(
+  category: ItemCategory,
+  data: Record<string, unknown>,
+): { title: string; typeKey: string | null } {
   switch (category) {
     case 'credit': {
       const store = (data.storeName as string | undefined) ?? '—';
@@ -75,27 +84,37 @@ function extractItemTitle(category: ItemCategory, data: Record<string, unknown>)
       const currency = (data.currency as string | undefined) ?? 'ILS';
       const value = amount / 100;
       const symbol = currency === 'ILS' ? '₪' : currency === 'USD' ? '$' : currency;
-      return `${store} · ${symbol}${value.toFixed(0)}`;
+      return { title: `${store} · ${symbol}${value.toFixed(0)}`, typeKey: null };
     }
     case 'warranty': {
       const store = (data.storeName as string | undefined) ?? '—';
       const productType = (data.productType as string | undefined) ?? '';
-      return productType ? `${store} · ${productType}` : store;
+      return {
+        title: productType ? `${store} · ${productType}` : store,
+        typeKey: null,
+      };
     }
     case 'subscription': {
-      return (data.serviceName as string | undefined) ?? '—';
+      return { title: (data.serviceName as string | undefined) ?? '—', typeKey: null };
     }
     case 'occasion': {
       const name = (data.name as string | undefined) ?? '';
       const type = (data.type as string | undefined) ?? '';
-      return name || type || '—';
+      return { title: name || type || '—', typeKey: null };
     }
     case 'document': {
       const docType = (data.type as string | undefined) ?? '';
       const owner = (data.ownerName as string | undefined) ?? '';
       const custom = (data.customTypeName as string | undefined) ?? '';
-      const head = custom || docType || '—';
-      return owner ? `${head} · ${owner}` : head;
+      // Custom name takes precedence — user typed it, no translation needed.
+      if (custom) {
+        return { title: owner ? `${custom} · ${owner}` : custom, typeKey: null };
+      }
+      // Standard enum type — translated at render via typeKey.
+      return {
+        title: owner || '—',
+        typeKey: docType ? `documentTypes.${docType}` : null,
+      };
     }
   }
 }
@@ -154,9 +173,11 @@ async function fetchCategoryStats(uid: string, category: ItemCategory): Promise<
 
   const items: ItemSummary[] = snap.docs.map((d) => {
     const data = d.data();
+    const { title, typeKey } = extractItem(category, data);
     return {
       id: d.id,
-      title: extractItemTitle(category, data),
+      title,
+      typeKey,
       status: typeof data.status === 'string' ? data.status : null,
       createdAt: tsMillis(data.createdAt),
     };
