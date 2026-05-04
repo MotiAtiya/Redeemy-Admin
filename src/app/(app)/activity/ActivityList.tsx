@@ -39,6 +39,8 @@ const EVENT_ICON: Record<EventType, LucideIcon> = {
   credit_unredeemed: Undo2,
   credit_expired: Hourglass,
   subscription_cancelled: Ban,
+  subscription_renewed: Repeat,
+  subscription_expired: Hourglass,
   warranty_closed: Archive,
   warranty_expired: Hourglass,
   family_created: Users,
@@ -173,6 +175,8 @@ function describeEvent(e: AppEvent, t: ReturnType<typeof useTranslations<'activi
     case 'credit_unredeemed':
     case 'credit_expired':
     case 'subscription_cancelled':
+    case 'subscription_renewed':
+    case 'subscription_expired':
     case 'warranty_closed':
     case 'warranty_expired':
     case 'firestore_write_failed':

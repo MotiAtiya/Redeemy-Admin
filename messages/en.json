@@ -178,6 +178,8 @@
       "credit_unredeemed": "restored a credit to active",
       "credit_expired": "credit expired",
       "subscription_cancelled": "cancelled a subscription",
+      "subscription_renewed": "renewed a subscription",
+      "subscription_expired": "subscription expired",
       "warranty_closed": "closed a warranty",
       "warranty_expired": "warranty expired",
       "firestore_write_failed": "Firestore write failed",

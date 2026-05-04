@@ -178,6 +178,8 @@
       "credit_unredeemed": "החזיר זיכוי לפעיל",
       "credit_expired": "זיכוי פג תוקף",
       "subscription_cancelled": "ביטל מנוי",
+      "subscription_renewed": "חידש מנוי",
+      "subscription_expired": "מנוי פג תוקף",
       "warranty_closed": "סגר אחריות",
       "warranty_expired": "אחריות פגה תוקף",
       "firestore_write_failed": "כשל בכתיבה ל-Firestore",
