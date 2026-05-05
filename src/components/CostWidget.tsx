@@ -8,7 +8,7 @@ export default async function CostWidget() {
   const locale = await getLocale();
   const snap = await getCostSnapshot();
 
-  const isSet = snap.amountUSD !== null;
+  const isSet = snap.amount !== null;
 
   return (
     <div className="rounded-[var(--radius-card)] bg-surface shadow-wallet p-5 flex items-start gap-4">
@@ -18,24 +18,36 @@ export default async function CostWidget() {
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between gap-2 mb-1">
           <h3 className="font-semibold text-base">{t('title')}</h3>
-          <CostEditButton initialUSD={snap.amountUSD} monthYear={snap.monthYear} />
+          <CostEditButton
+            initialAmount={snap.amount}
+            currency={snap.currency}
+            monthYear={snap.monthYear}
+          />
         </div>
 
         {isSet ? (
           <>
-            <p className="text-3xl font-bold">{formatUSD(snap.amountUSD!, locale)}</p>
+            <p className="text-3xl font-bold">
+              {formatCurrency(snap.amount!, snap.currency, locale)}
+            </p>
             <p className="text-xs text-text-secondary mb-2">{t('subtitle')}</p>
             <dl className="text-xs space-y-0.5">
               <Row
                 label={t('perActiveUser', { count: snap.activeUsers })}
-                value={snap.costPerActiveUser !== null ? formatUSD(snap.costPerActiveUser, locale) : '—'}
+                value={
+                  snap.costPerActiveUser !== null
+                    ? formatCurrency(snap.costPerActiveUser, snap.currency, locale)
+                    : '—'
+                }
               />
               <Row
                 label={t('at10x')}
                 value={
                   <span className="inline-flex items-center gap-1 font-medium">
                     <TrendingUp size={11} className="text-text-tertiary" aria-hidden />
-                    {snap.projectedAt10x !== null ? formatUSD(snap.projectedAt10x, locale) : '—'}
+                    {snap.projectedAt10x !== null
+                      ? formatCurrency(snap.projectedAt10x, snap.currency, locale)
+                      : '—'}
                   </span>
                 }
               />
@@ -71,10 +83,14 @@ function Row({ label, value }: { label: string; value: React.ReactNode }) {
   );
 }
 
-function formatUSD(amount: number, locale: string): string {
-  return new Intl.NumberFormat(locale, {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: amount < 1 ? 4 : 2,
-  }).format(amount);
+function formatCurrency(amount: number, currency: string, locale: string): string {
+  try {
+    return new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency,
+      maximumFractionDigits: amount < 1 ? 4 : 2,
+    }).format(amount);
+  } catch {
+    return `${amount.toFixed(2)} ${currency}`;
+  }
 }

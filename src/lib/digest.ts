@@ -22,7 +22,8 @@ export interface Digest {
     firestoreWriteFailed: number;
     imageUploadFailed: number;
   };
-  costMTDUSD: number | null;
+  costMTD: number | null;
+  costCurrency: string;
   totalUsers: number;
   appOpenedCount: number;
   generatedAt: number;
@@ -144,7 +145,7 @@ export async function buildDigest(): Promise<Digest> {
     errors,
     appOpenedCount,
     totalUsersCount,
-    costMTDUSD,
+    cost,
   ] = await Promise.all([
     fetchNewUsersBetween(start, end),
     countItemsCreatedBetween(start, end),
@@ -162,7 +163,8 @@ export async function buildDigest(): Promise<Digest> {
     newUsers,
     itemsCreated,
     errors,
-    costMTDUSD,
+    costMTD: cost.amount,
+    costCurrency: cost.currency,
     totalUsers: totalUsersCount,
     appOpenedCount,
     generatedAt: Date.now(),
@@ -257,12 +259,14 @@ async function fetchTotalUserCount(): Promise<number> {
   return r.users.length;
 }
 
-async function fetchCostMTD(): Promise<number | null> {
+async function fetchCostMTD(): Promise<{ amount: number | null; currency: string }> {
   const monthYear = new Date().toISOString().slice(0, 7);
   const doc = await adminFirestore.collection('admin_settings').doc('firebase_cost').get();
   const data = doc.exists ? doc.data() : null;
-  if (data?.monthYear === monthYear && typeof data?.amountUSD === 'number') {
-    return data.amountUSD;
+  const currency = typeof data?.currency === 'string' && data.currency.length > 0 ? data.currency : 'USD';
+  if (data?.monthYear === monthYear) {
+    if (typeof data?.amount === 'number') return { amount: data.amount, currency };
+    if (typeof data?.amountUSD === 'number') return { amount: data.amountUSD, currency };
   }
-  return null;
+  return { amount: null, currency };
 }

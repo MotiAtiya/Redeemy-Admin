@@ -64,7 +64,7 @@
   },
   "cost": {
     "title": "עלות Firebase",
-    "subtitle": "החודש (USD)",
+    "subtitle": "החודש",
     "perActiveUser": "עלות למשתמש פעיל ({count})",
     "at10x": "ב-10× משתמשים",
     "notSet": "טרם הוזנה. לחץ על העיפרון להזנה.",

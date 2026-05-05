@@ -4,12 +4,14 @@ import { adminAuth, adminFirestore } from './firebaseAdmin';
 const COLLECTION = 'admin_settings';
 const COST_DOC_ID = 'firebase_cost';
 const ACTIVE_USER_WINDOW_DAYS = 30;
+const DEFAULT_CURRENCY = 'USD';
 
 export type CostSource = 'manual' | 'bigquery';
 
 export interface CostSnapshot {
   monthYear: string; // 'YYYY-MM'
-  amountUSD: number | null; // null = not set yet for the current month
+  amount: number | null; // null = not set yet for the current month
+  currency: string; // ISO 4217 (e.g. 'USD', 'ILS')
   costPerActiveUser: number | null;
   projectedAt10x: number | null;
   activeUsers: number;
@@ -30,19 +32,30 @@ export async function getCostSnapshot(): Promise<CostSnapshot> {
   ]);
 
   const docData = costDoc.exists ? costDoc.data() : null;
-  const amountUSD =
-    docData?.monthYear === monthYear && typeof docData?.amountUSD === 'number'
-      ? (docData.amountUSD as number)
-      : null;
+  // Prefer the new `amount` field; fall back to legacy `amountUSD` so
+  // older Firestore docs keep rendering until the next refresh writes
+  // the new field.
+  const rawAmount =
+    typeof docData?.amount === 'number'
+      ? docData.amount
+      : typeof docData?.amountUSD === 'number'
+        ? docData.amountUSD
+        : null;
+  const amount = docData?.monthYear === monthYear && rawAmount !== null ? rawAmount : null;
+  const currency =
+    typeof docData?.currency === 'string' && docData.currency.length > 0
+      ? docData.currency
+      : DEFAULT_CURRENCY;
 
-  const cpu = amountUSD !== null && activeUsers > 0 ? amountUSD / activeUsers : null;
-  const proj = amountUSD !== null && activeUsers > 0 ? amountUSD * 10 : null;
+  const cpu = amount !== null && activeUsers > 0 ? amount / activeUsers : null;
+  const proj = amount !== null && activeUsers > 0 ? amount * 10 : null;
 
   const source: CostSource = docData?.source === 'bigquery' ? 'bigquery' : 'manual';
 
   return {
     monthYear,
-    amountUSD,
+    amount,
+    currency,
     costPerActiveUser: cpu,
     projectedAt10x: proj,
     activeUsers,
@@ -69,7 +82,8 @@ async function getActiveUserCount(): Promise<number> {
 }
 
 export interface CostUpdateInput {
-  amountUSD: number;
+  amount: number;
+  currency?: string;
   email: string;
 }
 
@@ -77,7 +91,8 @@ export async function updateCost(input: CostUpdateInput): Promise<void> {
   await adminFirestore.collection(COLLECTION).doc(COST_DOC_ID).set(
     {
       monthYear: currentMonthYear(),
-      amountUSD: input.amountUSD,
+      amount: input.amount,
+      currency: input.currency ?? DEFAULT_CURRENCY,
       updatedAt: new Date(),
       updatedBy: input.email,
       source: 'manual',

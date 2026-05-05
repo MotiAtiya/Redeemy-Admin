@@ -25,7 +25,7 @@ async function refresh() {
 
   // No data yet (e.g. export hasn't propagated). Don't overwrite the manual
   // value — leave whatever's already in the doc.
-  if (!result.hasData || result.amountUSD === null) {
+  if (!result.hasData || result.amount === null) {
     return NextResponse.json({
       ok: true,
       skipped: 'no_bigquery_data_yet',
@@ -36,7 +36,8 @@ async function refresh() {
   await adminFirestore.doc(COST_DOC_PATH).set(
     {
       monthYear: result.monthYear,
-      amountUSD: result.amountUSD,
+      amount: result.amount,
+      currency: result.currency ?? 'USD',
       updatedAt: new Date(),
       updatedBy: AUTO_UPDATED_BY,
       source: 'bigquery',
@@ -47,7 +48,8 @@ async function refresh() {
   return NextResponse.json({
     ok: true,
     monthYear: result.monthYear,
-    amountUSD: result.amountUSD,
+    amount: result.amount,
+    currency: result.currency,
     updatedBy: AUTO_UPDATED_BY,
   });
 }

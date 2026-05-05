@@ -64,7 +64,7 @@
   },
   "cost": {
     "title": "Firebase cost",
-    "subtitle": "this month (USD)",
+    "subtitle": "this month",
     "perActiveUser": "Per active user ({count})",
     "at10x": "At 10× users",
     "notSet": "Not set yet. Click the pencil to enter the amount.",

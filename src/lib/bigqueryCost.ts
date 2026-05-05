@@ -22,7 +22,8 @@ function getClient(): BigQuery {
 }
 
 export interface BigQueryCostResult {
-  amountUSD: number | null;
+  amount: number | null;
+  currency: string | null;
   monthYear: string;
   source: 'bigquery';
   hasData: boolean;
@@ -38,6 +39,9 @@ export interface BigQueryCostResult {
  * `invoice.month` is a 6-char string in the form `YYYYMM` (e.g. "202605").
  * We sum all `cost` rows for the current month, gracefully returning null
  * when no data is found yet (export has 24–48h initial lag).
+ *
+ * The currency is whatever GCP bills the project in (e.g. `ILS`, `USD`,
+ * `EUR`); the caller is expected to format with the returned `currency`.
  */
 export async function getMTDCostFromBigQuery(): Promise<BigQueryCostResult> {
   if (!PROJECT_ID) {
@@ -68,26 +72,21 @@ export async function getMTDCostFromBigQuery(): Promise<BigQueryCostResult> {
     const code = (err as { code?: number; message?: string })?.code;
     const message = (err as { message?: string })?.message ?? '';
     // Common case: table doesn't exist yet (export hasn't started). Return
-    // null so the caller can leave the existing manual value untouched.
+    // nulls so the caller can leave the existing manual value untouched.
     if (code === 404 || message.includes('Not found')) {
-      return { amountUSD: null, monthYear, source: 'bigquery', hasData: false };
+      return { amount: null, currency: null, monthYear, source: 'bigquery', hasData: false };
     }
     throw err;
   }
 
   const row = rows[0];
   if (!row || row.total_cost === null || row.total_cost === undefined) {
-    return { amountUSD: null, monthYear, source: 'bigquery', hasData: false };
-  }
-
-  const currency = row.currency ?? 'USD';
-  if (currency !== 'USD') {
-    // For V1 we only support USD. Surface a clear error to the operator.
-    throw new Error(`BigQuery billing currency is ${currency}, expected USD`);
+    return { amount: null, currency: null, monthYear, source: 'bigquery', hasData: false };
   }
 
   return {
-    amountUSD: Number(row.total_cost),
+    amount: Number(row.total_cost),
+    currency: row.currency ?? 'USD',
     monthYear,
     source: 'bigquery',
     hasData: true,

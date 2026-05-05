@@ -19,11 +19,13 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'invalid_body' }, { status: 400 });
   }
 
-  const amount = (body as { amountUSD?: unknown })?.amountUSD;
+  const raw = body as { amount?: unknown; amountUSD?: unknown; currency?: unknown };
+  const amount = typeof raw.amount === 'number' ? raw.amount : raw.amountUSD;
   if (typeof amount !== 'number' || !Number.isFinite(amount) || amount < 0) {
     return NextResponse.json({ error: 'invalid_amount' }, { status: 400 });
   }
+  const currency = typeof raw.currency === 'string' ? raw.currency : undefined;
 
-  await updateCost({ amountUSD: amount, email: session.email });
+  await updateCost({ amount, currency, email: session.email });
   return NextResponse.json({ ok: true });
 }

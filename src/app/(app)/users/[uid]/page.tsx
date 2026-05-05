@@ -64,9 +64,13 @@ export default async function UserDetailPage({ params }: PageProps) {
 
   // Optional cost contribution. Best-effort — silently null if anything fails.
   let costContribution: number | null = null;
+  let costCurrency = 'USD';
   try {
     const cost = await getCostSnapshot();
-    if (cost.costPerActiveUser !== null) costContribution = cost.costPerActiveUser;
+    if (cost.costPerActiveUser !== null) {
+      costContribution = cost.costPerActiveUser;
+      costCurrency = cost.currency;
+    }
   } catch {
     // ignore
   }
@@ -79,7 +83,14 @@ export default async function UserDetailPage({ params }: PageProps) {
       <FamilyCard family={detail.family} currentUid={detail.auth.uid} t={t} />
       <ItemsGrid items={detail.itemsByCategory} t={t} tUsers={tUsers} locale={locale} />
       <ActivitySection events={detail.events} t={t} locale={locale} />
-      {costContribution !== null && <CostContributionCard contribution={costContribution} t={t} />}
+      {costContribution !== null && (
+        <CostContributionCard
+          contribution={costContribution}
+          currency={costCurrency}
+          locale={locale}
+          t={t}
+        />
+      )}
     </div>
   );
 }
@@ -352,9 +363,13 @@ function ActivitySection({
 
 function CostContributionCard({
   contribution,
+  currency,
+  locale,
   t,
 }: {
   contribution: number;
+  currency: string;
+  locale: string;
   t: Awaited<ReturnType<typeof getTranslations<'userDetail'>>>;
 }) {
   return (
@@ -363,7 +378,7 @@ function CostContributionCard({
         {t('sections.cost')}
       </h2>
       <p className="text-sm text-text-secondary leading-relaxed">
-        {t('costMonthlyShare', { amount: formatUSD(contribution) })}
+        {t('costMonthlyShare', { amount: formatCurrency(contribution, currency, locale) })}
       </p>
     </section>
   );
@@ -430,12 +445,16 @@ function absoluteDate(ms: number, locale: string): string {
   return new Date(ms).toLocaleDateString(locale, { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
-function formatUSD(amount: number): string {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: amount < 1 ? 4 : 2,
-  }).format(amount);
+function formatCurrency(amount: number, currency: string, locale: string): string {
+  try {
+    return new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency,
+      maximumFractionDigits: amount < 1 ? 4 : 2,
+    }).format(amount);
+  } catch {
+    return `${amount.toFixed(2)} ${currency}`;
+  }
 }
 
 function labelPlatform(p: 'ios' | 'android'): string {

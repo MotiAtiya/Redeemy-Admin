@@ -53,7 +53,7 @@ export function renderDigestText(d: Digest): string {
     `  Firestore write failures: ${d.errors.firestoreWriteFailed}`,
     `  Image upload failures: ${d.errors.imageUploadFailed}`,
     '',
-    `Cost MTD: ${d.costMTDUSD !== null ? `$${d.costMTDUSD.toFixed(2)}` : 'not set'}`,
+    `Cost MTD: ${d.costMTD !== null ? formatCost(d.costMTD, d.costCurrency, 'en') : 'not set'}`,
   ];
   return lines.join('\n');
 }
@@ -115,7 +115,7 @@ export function renderDigestHtmlHe({ digest: d, dashboardUrl }: TemplateOptions)
         </tr>
         <tr>
           <td style="padding:3px 0;color:${TEXT_SECONDARY};text-align:right;">עלות החודש (MTD)</td>
-          <td style="padding:3px 0;text-align:left;font-weight:600;color:${TEXT_PRIMARY};">${d.costMTDUSD !== null ? `$${d.costMTDUSD.toFixed(2)}` : '—'}</td>
+          <td style="padding:3px 0;text-align:left;font-weight:600;color:${TEXT_PRIMARY};">${d.costMTD !== null ? formatCost(d.costMTD, d.costCurrency, 'he') : '—'}</td>
         </tr>
       </table>
     </div>
@@ -177,7 +177,7 @@ export function renderDigestHtmlEn({ digest: d, dashboardUrl }: TemplateOptions)
         </tr>
         <tr>
           <td style="padding:3px 0;color:${TEXT_SECONDARY};text-align:left;">Cost MTD</td>
-          <td style="padding:3px 0;text-align:right;font-weight:600;color:${TEXT_PRIMARY};">${d.costMTDUSD !== null ? `$${d.costMTDUSD.toFixed(2)}` : '—'}</td>
+          <td style="padding:3px 0;text-align:right;font-weight:600;color:${TEXT_PRIMARY};">${d.costMTD !== null ? formatCost(d.costMTD, d.costCurrency, 'en') : '—'}</td>
         </tr>
       </table>
     </div>
@@ -247,4 +247,16 @@ function escapeHtml(s: string): string {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
+}
+
+function formatCost(amount: number, currency: string, locale: string): string {
+  try {
+    return new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency,
+      maximumFractionDigits: amount < 1 ? 4 : 2,
+    }).format(amount);
+  } catch {
+    return `${amount.toFixed(2)} ${currency}`;
+  }
 }

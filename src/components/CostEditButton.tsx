@@ -5,16 +5,17 @@ import { useTranslations } from 'next-intl';
 import { Pencil, X } from 'lucide-react';
 
 interface Props {
-  initialUSD: number | null;
+  initialAmount: number | null;
+  currency: string;
   monthYear: string;
 }
 
-export default function CostEditButton({ initialUSD, monthYear }: Props) {
+export default function CostEditButton({ initialAmount, currency, monthYear }: Props) {
   const t = useTranslations('cost');
   const tCommon = useTranslations('common');
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(initialUSD !== null ? String(initialUSD) : '');
+  const [value, setValue] = useState(initialAmount !== null ? String(initialAmount) : '');
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
@@ -29,7 +30,7 @@ export default function CostEditButton({ initialUSD, monthYear }: Props) {
     const res = await fetch('/api/admin/cost', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ amountUSD: num }),
+      body: JSON.stringify({ amount: num, currency }),
     });
     if (!res.ok) {
       setError(t('saveFailed'));
@@ -81,10 +82,10 @@ export default function CostEditButton({ initialUSD, monthYear }: Props) {
                 </label>
                 <div className="relative">
                   <span
-                    className="absolute start-3 top-1/2 -translate-y-1/2 text-text-tertiary"
+                    className="absolute start-3 top-1/2 -translate-y-1/2 text-text-tertiary text-sm"
                     aria-hidden
                   >
-                    $
+                    {currencySymbol(currency)}
                   </span>
                   <input
                     id="cost-amount"
@@ -95,7 +96,7 @@ export default function CostEditButton({ initialUSD, monthYear }: Props) {
                     autoFocus
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
-                    className="w-full ps-7 pe-3 py-2 rounded-lg border border-separator bg-surface text-base outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                    className="w-full ps-9 pe-3 py-2 rounded-lg border border-separator bg-surface text-base outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
                     dir="ltr"
                   />
                 </div>
@@ -127,4 +128,13 @@ export default function CostEditButton({ initialUSD, monthYear }: Props) {
       )}
     </>
   );
+}
+
+function currencySymbol(code: string): string {
+  try {
+    const parts = new Intl.NumberFormat('en', { style: 'currency', currency: code }).formatToParts(0);
+    return parts.find((p) => p.type === 'currency')?.value ?? code;
+  } catch {
+    return code;
+  }
 }
