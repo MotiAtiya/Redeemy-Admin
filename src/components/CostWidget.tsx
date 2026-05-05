@@ -18,11 +18,13 @@ export default async function CostWidget() {
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between gap-2 mb-1">
           <h3 className="font-semibold text-base">{t('title')}</h3>
-          <CostEditButton
-            initialAmount={snap.amount}
-            currency={snap.currency}
-            monthYear={snap.monthYear}
-          />
+          {snap.source !== 'bigquery' && (
+            <CostEditButton
+              initialAmount={snap.amount}
+              currency={snap.currency}
+              monthYear={snap.monthYear}
+            />
+          )}
         </div>
 
         {isSet ? (
