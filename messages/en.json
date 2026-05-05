@@ -105,8 +105,11 @@
     },
     "chart": {
       "empty": "No data to display",
+      "noCostYet": "No cost yet (Free Tier covers everything)",
       "cost": "Cost",
+      "costAxis": "Cost",
       "activeUsers": "Active users",
+      "usersAxis": "Users",
       "perUser": "Cost per user",
       "day": "Day {day}",
       "spike": "Spike vs avg"

@@ -30,6 +30,11 @@ export default function DailyChart({ data, currency, locale }: Props) {
     cost: Number(d.amount.toFixed(4)),
   }));
 
+  const totalCost = rows.reduce((s, r) => s + r.cost, 0);
+  if (totalCost === 0) {
+    return <p className="text-sm text-text-secondary py-8 text-center">{t('noCostYet')}</p>;
+  }
+
   // Spike detection: any day > 3× the rolling average
   const avg = rows.reduce((s, r) => s + r.cost, 0) / Math.max(rows.length, 1);
   const spikes = new Set(rows.filter((r) => r.cost > avg * 3 && r.cost > 0).map((r) => r.day));

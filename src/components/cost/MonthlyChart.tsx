@@ -23,6 +23,8 @@ interface Props {
   locale: string;
 }
 
+const USERS_COLOR = '#F59E0B'; // amber — clearly distinct from the teal cost color
+
 export default function MonthlyChart({ data, activeUsersByMonth, currency, locale }: Props) {
   const t = useTranslations('costDetail.chart');
   const [drillMonth, setDrillMonth] = useState<string | null>(null);
@@ -37,12 +39,18 @@ export default function MonthlyChart({ data, activeUsersByMonth, currency, local
     users: activeUsersByMonth[m.month] ?? 0,
   }));
 
+  const totalCost = rows.reduce((s, r) => s + r.cost, 0);
+  const hasCost = totalCost > 0;
+
   return (
     <>
-      <ResponsiveContainer width="100%" height={280}>
+      {!hasCost && (
+        <p className="text-xs text-text-secondary mb-3">{t('noCostYet')}</p>
+      )}
+      <ResponsiveContainer width="100%" height={300}>
         <ComposedChart
           data={rows}
-          margin={{ top: 10, right: 16, left: 0, bottom: 0 }}
+          margin={{ top: 16, right: 32, left: 4, bottom: 8 }}
           onClick={(e) => {
             const label = (e as { activeLabel?: string })?.activeLabel;
             if (label) setDrillMonth(label);
@@ -50,18 +58,32 @@ export default function MonthlyChart({ data, activeUsersByMonth, currency, local
         >
           <CartesianGrid strokeDasharray="3 3" stroke="var(--separator)" />
           <XAxis dataKey="month" tick={{ fontSize: 11, fill: 'var(--text-secondary)' }} />
+          {hasCost && (
+            <YAxis
+              yAxisId="cost"
+              tick={{ fontSize: 11, fill: 'var(--primary)' }}
+              tickFormatter={(v: number) => formatCurrency(v, currency, locale)}
+              width={80}
+              label={{
+                value: t('costAxis'),
+                angle: -90,
+                position: 'insideLeft',
+                style: { fill: 'var(--primary)', fontSize: 11, textAnchor: 'middle' },
+              }}
+            />
+          )}
           <YAxis
-            yAxisId="left"
-            tick={{ fontSize: 11, fill: 'var(--text-secondary)' }}
-            tickFormatter={(v: number) => formatCurrency(v, currency, locale)}
-            width={70}
-          />
-          <YAxis
-            yAxisId="right"
-            orientation="right"
-            tick={{ fontSize: 11, fill: 'var(--text-secondary)' }}
+            yAxisId="users"
+            orientation={hasCost ? 'right' : 'left'}
+            tick={{ fontSize: 11, fill: USERS_COLOR }}
             allowDecimals={false}
-            width={32}
+            width={50}
+            label={{
+              value: t('usersAxis'),
+              angle: hasCost ? 90 : -90,
+              position: hasCost ? 'insideRight' : 'insideLeft',
+              style: { fill: USERS_COLOR, fontSize: 11, textAnchor: 'middle' },
+            }}
           />
           <Tooltip
             content={({ active, payload, label }) => {
@@ -71,10 +93,12 @@ export default function MonthlyChart({ data, activeUsersByMonth, currency, local
               return (
                 <div className="rounded-lg bg-surface shadow-wallet p-3 text-xs border border-separator">
                   <p className="font-semibold mb-1">{label}</p>
-                  <p className="text-primary tabular-nums">
-                    {t('cost')}: {formatCurrency(cost, currency, locale)}
-                  </p>
-                  <p className="text-text-secondary tabular-nums">
+                  {hasCost && (
+                    <p className="text-primary tabular-nums">
+                      {t('cost')}: {formatCurrency(cost, currency, locale)}
+                    </p>
+                  )}
+                  <p className="tabular-nums" style={{ color: USERS_COLOR }}>
                     {t('activeUsers')}: {users}
                   </p>
                 </div>
@@ -82,22 +106,25 @@ export default function MonthlyChart({ data, activeUsersByMonth, currency, local
             }}
           />
           <Legend wrapperStyle={{ fontSize: 12 }} />
-          <Bar
-            yAxisId="left"
-            dataKey="cost"
-            name={t('cost')}
-            fill="var(--primary)"
-            radius={[6, 6, 0, 0]}
-            cursor="pointer"
-          />
+          {hasCost && (
+            <Bar
+              yAxisId="cost"
+              dataKey="cost"
+              name={t('cost')}
+              fill="var(--primary)"
+              radius={[6, 6, 0, 0]}
+              cursor="pointer"
+            />
+          )}
           <Line
-            yAxisId="right"
+            yAxisId="users"
             type="monotone"
             dataKey="users"
             name={t('activeUsers')}
-            stroke="var(--text-tertiary)"
+            stroke={USERS_COLOR}
             strokeWidth={2}
-            dot={{ r: 3 }}
+            strokeDasharray="5 5"
+            dot={{ r: 4, fill: USERS_COLOR }}
           />
         </ComposedChart>
       </ResponsiveContainer>

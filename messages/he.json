@@ -105,8 +105,11 @@
     },
     "chart": {
       "empty": "אין נתונים להצגה",
+      "noCostYet": "טרם נצברה עלות (Free Tier מכסה הכל)",
       "cost": "עלות",
+      "costAxis": "עלות",
       "activeUsers": "משתמשים פעילים",
+      "usersAxis": "משתמשים",
       "perUser": "עלות למשתמש",
       "day": "יום {day}",
       "spike": "קפיצה חריגה"

@@ -35,6 +35,11 @@ export default function CostPerUserChart({ data, activeUsersByMonth, currency, l
     };
   });
 
+  const totalPerUser = rows.reduce((s, r) => s + r.perUser, 0);
+  if (totalPerUser === 0) {
+    return <p className="text-sm text-text-secondary py-8 text-center">{t('noCostYet')}</p>;
+  }
+
   return (
     <ResponsiveContainer width="100%" height={220}>
       <LineChart data={rows} margin={{ top: 10, right: 16, left: 0, bottom: 0 }}>
