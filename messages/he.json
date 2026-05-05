@@ -20,7 +20,8 @@
   "nav": {
     "home": "בית",
     "users": "משתמשים",
-    "activity": "פעילות"
+    "activity": "פעילות",
+    "cost": "עלות"
   },
   "auth": {
     "title": "Redeemy Admin",

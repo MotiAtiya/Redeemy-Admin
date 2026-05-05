@@ -20,7 +20,8 @@
   "nav": {
     "home": "Home",
     "users": "Users",
-    "activity": "Activity"
+    "activity": "Activity",
+    "cost": "Cost"
   },
   "auth": {
     "title": "Redeemy Admin",

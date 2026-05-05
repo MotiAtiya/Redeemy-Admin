@@ -2,12 +2,12 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { Home, Users, Activity } from 'lucide-react';
+import { Home, Users, Activity, DollarSign } from 'lucide-react';
 import type { ComponentType } from 'react';
 
 interface NavItem {
   href: string;
-  labelKey: 'home' | 'users' | 'activity';
+  labelKey: 'home' | 'users' | 'activity' | 'cost';
   Icon: ComponentType<{ size?: number; className?: string }>;
 }
 
@@ -15,6 +15,7 @@ const ITEMS: readonly NavItem[] = [
   { href: '/', labelKey: 'home', Icon: Home },
   { href: '/users', labelKey: 'users', Icon: Users },
   { href: '/activity', labelKey: 'activity', Icon: Activity },
+  { href: '/cost', labelKey: 'cost', Icon: DollarSign },
 ];
 
 export default function NavLinks() {
