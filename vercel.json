@@ -8,6 +8,10 @@
     {
       "path": "/api/cron/refresh-cost",
       "schedule": "0 2 * * *"
+    },
+    {
+      "path": "/api/cron/cost-alerts",
+      "schedule": "30 2 * * *"
     }
   ]
 }

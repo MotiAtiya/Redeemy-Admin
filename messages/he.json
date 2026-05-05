@@ -8,6 +8,7 @@
     "password": "סיסמה",
     "language": "שפה",
     "cancel": "ביטול",
+    "back": "חזרה",
     "loading": "טוען...",
     "theme": {
       "auto": "אוטומטי",
@@ -77,6 +78,120 @@
     "saveFailed": "השמירה נכשלה. נסה שוב.",
     "sourceAuto": "מתעדכן אוטומטית מ-BigQuery",
     "sourceManual": "עודכן ידנית"
+  },
+  "costDetail": {
+    "title": "ניתוח עלות Firebase",
+    "subtitle": "סקירה מלאה של ההוצאות החודשיות, פירוק לפי שירותים ומגמות.",
+    "noData": "אין עדיין נתונים. ה-export של BigQuery עוד לא הופעל או שהמטעין הראשוני (24-48 שעות) טרם הסתיים.",
+    "stats": {
+      "mtd": "החודש עד עכשיו",
+      "mtdProjection": "תחזית סוף-חודש: {amount}",
+      "vsPrev": "חודש קודם",
+      "trend": {
+        "up": "עולה לעומת קודם",
+        "down": "יורד לעומת קודם",
+        "flat": "יציב"
+      },
+      "ytd": "מתחילת השנה",
+      "peak": "שיא: {month} ({amount})",
+      "runRate": "Run-rate שנתי",
+      "forecast": "תחזית חודש הבא: {amount}"
+    },
+    "sections": {
+      "monthly": "עלות חודשית מאז התחלת ה-export",
+      "daily": "עלות יומית — חודש נוכחי",
+      "perUser": "עלות למשתמש פעיל לאורך זמן",
+      "skus": "פירוק לפי שירות / SKU"
+    },
+    "chart": {
+      "empty": "אין נתונים להצגה",
+      "cost": "עלות",
+      "activeUsers": "משתמשים פעילים",
+      "perUser": "עלות למשתמש",
+      "day": "יום {day}",
+      "spike": "קפיצה חריגה"
+    },
+    "skus": {
+      "service": "שירות",
+      "sku": "SKU",
+      "usage": "שימוש",
+      "cost": "עלות",
+      "delta": "שינוי מקודם",
+      "empty": "אין SKUs לחודש זה",
+      "loadingHistory": "טוען היסטוריה...",
+      "noHistory": "אין היסטוריה לפריט זה",
+      "historyHeader": "{count} ימים אחרונים"
+    },
+    "whatChanged": {
+      "title": "מה השתנה?",
+      "subtitle": "5 השינויים הגדולים ביותר מול חודש קודם",
+      "empty": "אין שינויים משמעותיים מול החודש הקודם"
+    },
+    "freeTier": {
+      "title": "חסכת מ-Free Tier",
+      "descriptionSaved": "Firebase מעניק שכבת חינם נדיבה לרוב השירותים. הסכום הזה הוא מה שהיה אמור להיות מחויב לולא שכבת החינם החודש.",
+      "descriptionNone": "החודש לא נצרכו credits של שכבת חינם. ייתכן שהשירותים בשימוש מחויבים מהשנייה הראשונה."
+    },
+    "lag": {
+      "fresh": "BigQuery מעודכן (lag של {hours} שעות)",
+      "stale": "BigQuery מפגר ({hours} שעות) — יתעדכן אוטומטית",
+      "unknown": "lag של BigQuery לא ידוע",
+      "refreshedAgo": "נטען לפני {minutes} דקות",
+      "noData": "אין נתונים עדיין מ-BigQuery. וודא שה-export מופעל ושעבר זמן ההמתנה הראשוני."
+    },
+    "refresh": {
+      "label": "רענן עכשיו",
+      "loading": "מרענן...",
+      "done": "עודכן",
+      "error": "שגיאה"
+    },
+    "export": {
+      "label": "ייצוא CSV"
+    },
+    "drill": {
+      "title": "{month} — פירוק SKU",
+      "loading": "טוען...",
+      "empty": "אין נתונים לחודש זה"
+    },
+    "compare": {
+      "title": "השוואת חודשים",
+      "loading": "טוען נתונים...",
+      "sku": "SKU",
+      "diff": "שינוי"
+    },
+    "threshold": {
+      "title": "התראות עלות",
+      "subtitle": "קבל מייל אם העלות החודשית עוברת סף ({currency}).",
+      "enableLabel": "הפעל התראת סף",
+      "amountLabel": "סף",
+      "dailySpikeLabel": "התרע גם על קפיצה יומית חריגה (פי 3 מהממוצע)",
+      "save": "שמור",
+      "saved": "נשמר",
+      "invalid": "ערך לא תקין",
+      "saveFailed": "השמירה נכשלה"
+    },
+    "tips": {
+      "title": "טיפים לחיסכון",
+      "items": {
+        "topSkuDominates": "{sku} אחראי על {pct}% מהעלות החודש. שווה לבדוק האם אפשר לצמצם.",
+        "firestoreReads": "רוב העלות הולכת ל-Firestore reads. שקול: שימוש ב-`get` במקום `onSnapshot` על דאטא קבוע, הוספת קאש ב-Zustand, איחוד queries.",
+        "firestoreWrites": "כתיבות Firestore יקרות. בדוק batch writes, debounce על שדות שמתעדכנים תכופות, וכו'.",
+        "firestoreGeneric": "Firestore הוא ה-driver העיקרי של העלות החודש. שווה לבדוק אילו queries הכי תכופים ב-Performance Monitoring.",
+        "storageEgress": "Egress (הורדות) של Cloud Storage עולות כסף. שקול CDN עם cache headers, או הקטנת גודל תמונות (כבר מתבצעת — ודא ש-thumbnails בשימוש).",
+        "storageOps": "הרבה פעולות class A/B על Storage. בדוק האם יש loops שגורמים ל-list operations מיותרים.",
+        "functionsInvocations": "Cloud Functions / Run עולים פר-קריאה ופר-זמן ריצה. בדוק קולדסטארטים, אופטימיזציית משך ריצה.",
+        "messagingGeneric": "FCM שולח הרבה הודעות. ודא שאין כפילויות, ושאתה לא שולח לטוקנים מתים.",
+        "loggingVolume": "Cloud Logging גובה לפי נפח. שווה להוריד log level ב-production או להוסיף sampling.",
+        "spikeWarning": "{sku} קפץ ב-{pct}% החודש. שווה לחקור איזה שינוי גרם לזה."
+      }
+    },
+    "projectMeta": {
+      "title": "מידע על הפרויקט",
+      "projectId": "Project ID",
+      "dataset": "BigQuery dataset",
+      "openBilling": "פתח ב-Cloud Billing",
+      "openBigQuery": "פתח ב-BigQuery"
+    }
   },
   "errors": {
     "pageError": {

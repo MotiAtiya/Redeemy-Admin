@@ -1,24 +1,32 @@
+import Link from 'next/link';
 import { getTranslations, getLocale } from 'next-intl/server';
-import { DollarSign, TrendingUp, Zap, Pencil as PencilSmall } from 'lucide-react';
+import { DollarSign, TrendingUp, Zap, Pencil as PencilSmall, ArrowLeft, ArrowRight } from 'lucide-react';
 import { getCostSnapshot } from '@/lib/cost';
+import { formatCurrency } from '@/lib/formatCurrency';
 import CostEditButton from './CostEditButton';
 
 export default async function CostWidget() {
   const t = await getTranslations('cost');
   const locale = await getLocale();
   const snap = await getCostSnapshot();
+  const Arrow = locale === 'he' ? ArrowLeft : ArrowRight;
 
   const isSet = snap.amount !== null;
 
   return (
-    <div className="rounded-[var(--radius-card)] bg-surface shadow-wallet p-5 flex items-start gap-4">
+    <Link
+      href="/cost"
+      className="group rounded-[var(--radius-card)] bg-surface shadow-wallet p-5 flex items-start gap-4 hover:shadow-md transition"
+    >
       <div className="rounded-lg bg-primary-surface text-primary p-3 shrink-0">
         <DollarSign size={24} aria-hidden />
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between gap-2 mb-1">
           <h3 className="font-semibold text-base">{t('title')}</h3>
-          {snap.source !== 'bigquery' && (
+          {snap.source === 'bigquery' ? (
+            <Arrow size={16} className="text-text-tertiary group-hover:text-primary transition" aria-hidden />
+          ) : (
             <CostEditButton
               initialAmount={snap.amount}
               currency={snap.currency}
@@ -72,7 +80,7 @@ export default async function CostWidget() {
           <p className="text-text-secondary text-sm leading-relaxed">{t('notSet')}</p>
         )}
       </div>
-    </div>
+    </Link>
   );
 }
 
@@ -83,16 +91,4 @@ function Row({ label, value }: { label: string; value: React.ReactNode }) {
       <dd className="font-medium tabular-nums">{value}</dd>
     </div>
   );
-}
-
-function formatCurrency(amount: number, currency: string, locale: string): string {
-  try {
-    return new Intl.NumberFormat(locale, {
-      style: 'currency',
-      currency,
-      maximumFractionDigits: amount < 1 ? 4 : 2,
-    }).format(amount);
-  } catch {
-    return `${amount.toFixed(2)} ${currency}`;
-  }
 }

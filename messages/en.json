@@ -8,6 +8,7 @@
     "password": "Password",
     "language": "Language",
     "cancel": "Cancel",
+    "back": "Back",
     "loading": "Loading...",
     "theme": {
       "auto": "Auto",
@@ -77,6 +78,120 @@
     "saveFailed": "Save failed. Please try again.",
     "sourceAuto": "Auto-updated from BigQuery",
     "sourceManual": "Manually updated"
+  },
+  "costDetail": {
+    "title": "Firebase cost analysis",
+    "subtitle": "Full breakdown of monthly spend, services, and trends.",
+    "noData": "No data yet. The BigQuery export hasn't been enabled or the initial 24–48h warmup hasn't finished.",
+    "stats": {
+      "mtd": "Month-to-date",
+      "mtdProjection": "End-of-month forecast: {amount}",
+      "vsPrev": "Previous month",
+      "trend": {
+        "up": "Trending up",
+        "down": "Trending down",
+        "flat": "Stable"
+      },
+      "ytd": "Year-to-date",
+      "peak": "Peak: {month} ({amount})",
+      "runRate": "Annual run-rate",
+      "forecast": "Next-month forecast: {amount}"
+    },
+    "sections": {
+      "monthly": "Monthly cost since export started",
+      "daily": "Daily cost — current month",
+      "perUser": "Cost per active user over time",
+      "skus": "Service / SKU breakdown"
+    },
+    "chart": {
+      "empty": "No data to display",
+      "cost": "Cost",
+      "activeUsers": "Active users",
+      "perUser": "Cost per user",
+      "day": "Day {day}",
+      "spike": "Spike vs avg"
+    },
+    "skus": {
+      "service": "Service",
+      "sku": "SKU",
+      "usage": "Usage",
+      "cost": "Cost",
+      "delta": "Δ vs last month",
+      "empty": "No SKUs for this month",
+      "loadingHistory": "Loading history...",
+      "noHistory": "No history for this item",
+      "historyHeader": "Last {count} days"
+    },
+    "whatChanged": {
+      "title": "What changed?",
+      "subtitle": "Top 5 movers vs the previous month",
+      "empty": "No significant changes vs the previous month"
+    },
+    "freeTier": {
+      "title": "Saved by free tier",
+      "descriptionSaved": "Firebase grants a generous free tier for most services. This is what would have been billed without it this month.",
+      "descriptionNone": "No free-tier credits applied this month. The services in use may bill from the first request."
+    },
+    "lag": {
+      "fresh": "BigQuery up to date (lag {hours}h)",
+      "stale": "BigQuery lagging by {hours}h — will catch up automatically",
+      "unknown": "BigQuery lag unknown",
+      "refreshedAgo": "Loaded {minutes}m ago",
+      "noData": "No data from BigQuery yet. Verify the export is enabled and the initial warmup has elapsed."
+    },
+    "refresh": {
+      "label": "Refresh now",
+      "loading": "Refreshing...",
+      "done": "Updated",
+      "error": "Error"
+    },
+    "export": {
+      "label": "Export CSV"
+    },
+    "drill": {
+      "title": "{month} — SKU breakdown",
+      "loading": "Loading...",
+      "empty": "No data for this month"
+    },
+    "compare": {
+      "title": "Compare months",
+      "loading": "Loading data...",
+      "sku": "SKU",
+      "diff": "Diff"
+    },
+    "threshold": {
+      "title": "Cost alerts",
+      "subtitle": "Get an email if monthly cost crosses a threshold ({currency}).",
+      "enableLabel": "Enable threshold alert",
+      "amountLabel": "Threshold",
+      "dailySpikeLabel": "Also alert on a single-day spike (3× recent average)",
+      "save": "Save",
+      "saved": "Saved",
+      "invalid": "Invalid value",
+      "saveFailed": "Save failed"
+    },
+    "tips": {
+      "title": "Optimization tips",
+      "items": {
+        "topSkuDominates": "{sku} accounts for {pct}% of this month's cost. Worth checking if it can be reduced.",
+        "firestoreReads": "Most of the cost goes to Firestore reads. Consider: using `get` instead of `onSnapshot` on stable data, adding Zustand caching, consolidating queries.",
+        "firestoreWrites": "Firestore writes are expensive. Look at batch writes, debouncing frequently-updated fields, etc.",
+        "firestoreGeneric": "Firestore is the main driver this month. Worth checking which queries fire most often via Performance Monitoring.",
+        "storageEgress": "Cloud Storage egress (downloads) costs money. Consider a CDN with cache headers, or smaller image sizes (already done — verify thumbnails are used).",
+        "storageOps": "Many class A/B operations on Storage. Check for loops causing unnecessary list operations.",
+        "functionsInvocations": "Cloud Functions / Run cost per invocation and per execution time. Watch cold starts and runtime length.",
+        "messagingGeneric": "FCM is sending many messages. Ensure no duplicates and that you aren't sending to dead tokens.",
+        "loggingVolume": "Cloud Logging bills by volume. Consider lowering production log level or adding sampling.",
+        "spikeWarning": "{sku} jumped {pct}% this month. Investigate what change caused it."
+      }
+    },
+    "projectMeta": {
+      "title": "Project info",
+      "projectId": "Project ID",
+      "dataset": "BigQuery dataset",
+      "openBilling": "Open in Cloud Billing",
+      "openBigQuery": "Open in BigQuery"
+    }
   },
   "errors": {
     "pageError": {

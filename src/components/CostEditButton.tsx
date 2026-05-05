@@ -41,10 +41,14 @@ export default function CostEditButton({ initialAmount, currency, monthYear }: P
   }
 
   return (
-    <>
+    <span onClick={(e) => e.stopPropagation()}>
       <button
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setOpen(true);
+        }}
         className="inline-flex items-center gap-1 text-xs text-primary hover:underline rounded p-1 -m-1"
         aria-label={t('editAria')}
       >
@@ -126,7 +130,7 @@ export default function CostEditButton({ initialAmount, currency, monthYear }: P
           </div>
         </div>
       )}
-    </>
+    </span>
   );
 }
 
