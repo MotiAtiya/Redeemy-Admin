@@ -1,5 +1,3 @@
-import { ArrowLeft, ArrowRight } from 'lucide-react';
-import Link from 'next/link';
 import { cookies } from 'next/headers';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { SESSION_COOKIE_NAME, verifySession } from '@/lib/session';
@@ -33,9 +31,7 @@ export default async function CostPage() {
   }
 
   const t = await getTranslations('costDetail');
-  const tCommon = await getTranslations('common');
   const locale = await getLocale();
-  const Arrow = locale === 'he' ? ArrowRight : ArrowLeft;
 
   const [analytics, alertConfig] = await Promise.all([
     getCostAnalytics(),
@@ -45,23 +41,15 @@ export default async function CostPage() {
 
   return (
     <div className="space-y-5">
-      <div className="flex items-center justify-between gap-3">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-1 text-sm text-text-secondary hover:text-text-primary"
-        >
-          <Arrow size={16} aria-hidden />
-          {tCommon('back')}
-        </Link>
+      <header className="flex items-baseline justify-between flex-wrap gap-3">
+        <div>
+          <h1 className="text-3xl font-bold mb-1">{t('title')}</h1>
+          <p className="text-text-secondary text-sm">{t('subtitle')}</p>
+        </div>
         <div className="flex items-center gap-2">
           <RefreshNowButton />
           <ExportCsvButton hasData={analytics.hasData} />
         </div>
-      </div>
-
-      <header>
-        <h1 className="text-3xl font-bold mb-1">{t('title')}</h1>
-        <p className="text-text-secondary text-sm">{t('subtitle')}</p>
       </header>
 
       <LagIndicator
